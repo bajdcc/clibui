@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="clibjs\cjs.h" />
+    <ClInclude Include="clibjs\cjsast.h" />
+    <ClInclude Include="clibjs\cjsgen.h" />
+    <ClInclude Include="clibjs\cjsgui.h" />
+    <ClInclude Include="clibjs\cjslexer.h" />
+    <ClInclude Include="clibjs\cjsmem.h" />
+    <ClInclude Include="clibjs\cjsparser.h" />
+    <ClInclude Include="clibjs\cjsrender.h" />
+    <ClInclude Include="clibjs\cjsruntime.h" />
+    <ClInclude Include="clibjs\cjstypes.h" />
+    <ClInclude Include="clibjs\cjsunit.h" />
+    <ClInclude Include="clibjs\cjsnet.h" />
+    <ClInclude Include="clibjs\JS2D.h" />
+    <ClInclude Include="curl\curl.h" />
+    <ClInclude Include="curl\curlbuild.h" />
+    <ClInclude Include="curl\curlrules.h" />
+    <ClInclude Include="curl\curlver.h" />
+    <ClInclude Include="curl\easy.h" />
+    <ClInclude Include="curl\mprintf.h" />
+    <ClInclude Include="curl\multi.h" />
+    <ClInclude Include="libqrencode\bitstream.h" />
+    <ClInclude Include="libqrencode\config.h" />
+    <ClInclude Include="libqrencode\mask.h" />
+    <ClInclude Include="libqrencode\mmask.h" />
+    <ClInclude Include="libqrencode\mqrspec.h" />
+    <ClInclude Include="libqrencode\qrencode.h" />
+    <ClInclude Include="libqrencode\qrinput.h" />
+    <ClInclude Include="libqrencode\qrspec.h" />
+    <ClInclude Include="libqrencode\rscode.h" />
+    <ClInclude Include="libqrencode\split.h" />
+    <ClInclude Include="libzplay\libzplay.h" />
+    <ClInclude Include="nlohmann_json\json.h" />
+    <ClInclude Include="render\Direct2D.h" />
+    <ClInclude Include="render\Direct2DRenderTarget.h" />
+    <ClInclude Include="restclient-cpp\connection.h" />
+    <ClInclude Include="restclient-cpp\helpers.h" />
+    <ClInclude Include="restclient-cpp\restclient.h" />
+    <ClInclude Include="restclient-cpp\version.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="ui\gdi\Gdi.h" />
+    <ClInclude Include="ui\window\Window.h" />
+    <ClInclude Include="ui\window\WindowClass.h" />
+    <ClInclude Include="ui\window\WindowMsgLoop.h" />
+    <ClInclude Include="zlib\zconf.h" />
+    <ClInclude Include="zlib\zlib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="clibjs\cjs.cpp" />
+    <ClCompile Include="clibjs\cjsast.cpp" />
+    <ClCompile Include="clibjs\cjsgen.cpp" />
+    <ClCompile Include="clibjs\cjsgen_ast.cpp" />
+    <ClCompile Include="clibjs\cjsgui.cpp" />
+    <ClCompile Include="clibjs\cjslexer.cpp" />
+    <ClCompile Include="clibjs\cjsmem.cpp" />
+    <ClCompile Include="clibjs\cjsparser.cpp" />
+    <ClCompile Include="clibjs\cjsrender.cpp" />
+    <ClCompile Include="clibjs\cjsruntime.cpp" />
+    <ClCompile Include="clibjs\cjsruntime_base.cpp" />
+    <ClCompile Include="clibjs\cjsruntime_http.cpp" />
+    <ClCompile Include="clibjs\cjsruntime_object.cpp" />
+    <ClCompile Include="clibjs\cjsruntime_ui.cpp" />
+    <ClCompile Include="clibjs\cjsruntime_util.cpp" />
+    <ClCompile Include="clibjs\cjstypes.cpp" />
+    <ClCompile Include="clibjs\cjsunit.cpp" />
+    <ClCompile Include="clibjs\cjsnet.cpp" />
+    <ClCompile Include="clibjs\JS2D.cpp" />
+    <ClCompile Include="clibjs\util\cjsext_puzzle_Klotski_1.cpp" />
+    <ClCompile Include="libqrencode\bitstream.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="libqrencode\mask.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="libqrencode\mmask.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="libqrencode\mqrspec.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="libqrencode\qrencode.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="libqrencode\qrinput.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="libqrencode\qrspec.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="libqrencode\rscode.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="libqrencode\split.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="render\Direct2D.cpp" />
+    <ClCompile Include="render\Direct2DRenderTarget.cpp" />
+    <ClCompile Include="restclient-cpp\connection.cpp" />
+    <ClCompile Include="restclient-cpp\helpers.cpp" />
+    <ClCompile Include="restclient-cpp\restclient.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ui\gdi\Color.cpp" />
+    <ClCompile Include="ui\gdi\Font.cpp" />
+    <ClCompile Include="ui\gdi\Point.cpp" />
+    <ClCompile Include="ui\gdi\Rect.cpp" />
+    <ClCompile Include="ui\gdi\Size.cpp" />
+    <ClCompile Include="ui\window\Window.cpp" />
+    <ClCompile Include="ui\window\WindowClass.cpp" />
+    <ClCompile Include="ui\window\WindowMsgLoop.cpp" />
+    <ClCompile Include="WinMain.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{b7097b1a-9da9-43db-bac3-afc707537da6}</ProjectGuid>
+    <RootNamespace>clibui</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;BUILDING_LIBCURL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcmtd.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>md "$(TargetDir)script"
+xcopy /r /y /e /d /EXCLUDE:$(ProjectDir)script\exclude.txt "$(ProjectDir)script" "$(TargetDir)script"
+xcopy /r /y /e /d "$(ProjectDir)dll" "$(TargetDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;BUILDING_LIBCURL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcmtd.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>md "$(TargetDir)script"
+xcopy /r /y /e /d /EXCLUDE:$(ProjectDir)script\exclude.txt "$(ProjectDir)script" "$(TargetDir)script"
+xcopy /r /y /e /d "$(ProjectDir)dll" "$(TargetDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

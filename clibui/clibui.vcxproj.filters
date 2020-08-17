@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ui\gdi\Gdi.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\window\Window.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\window\WindowClass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\window\WindowMsgLoop.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\cjs.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\cjsast.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\cjsgen.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\cjsgui.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\cjslexer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\cjsmem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\cjsparser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\cjsrender.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\cjsruntime.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\cjstypes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\cjsunit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\JS2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Direct2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Direct2DRenderTarget.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zconf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zlib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="restclient-cpp\connection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="restclient-cpp\helpers.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="restclient-cpp\restclient.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="restclient-cpp\version.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="nlohmann_json\json.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="curl\curl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="curl\curlbuild.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="curl\curlrules.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="curl\curlver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="curl\easy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="curl\mprintf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="curl\multi.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="clibjs\cjsnet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libzplay\libzplay.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libqrencode\bitstream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libqrencode\config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libqrencode\mask.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libqrencode\mmask.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libqrencode\mqrspec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libqrencode\qrencode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libqrencode\qrinput.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libqrencode\qrspec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libqrencode\rscode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libqrencode\split.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\gdi\Color.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\gdi\Font.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\gdi\Point.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\gdi\Rect.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\gdi\Size.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\window\Window.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\window\WindowClass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\window\WindowMsgLoop.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Direct2D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Direct2DRenderTarget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\util\cjsext_puzzle_Klotski_1.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjs.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsast.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsgen.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsgen_ast.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsgui.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjslexer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsmem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsparser.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsrender.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsruntime.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsruntime_base.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsruntime_http.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsruntime_object.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsruntime_ui.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsruntime_util.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjstypes.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsunit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\JS2D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="restclient-cpp\connection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="restclient-cpp\helpers.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="restclient-cpp\restclient.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clibjs\cjsnet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="libqrencode\bitstream.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="libqrencode\mask.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="libqrencode\mmask.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="libqrencode\mqrspec.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="libqrencode\qrencode.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="libqrencode\qrinput.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="libqrencode\qrspec.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="libqrencode\rscode.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="libqrencode\split.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
