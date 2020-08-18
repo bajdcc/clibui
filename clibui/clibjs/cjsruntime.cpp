@@ -572,7 +572,7 @@ namespace clib {
             }
         }
         if (result != 10) {
-            if (permanents.state == 0 && !current_stack) {
+            if (permanents.state == 0 && !current_stack && !GLOBAL_STATE.bound.IsRectEmpty()) {
                 permanents.state = 1;
             }
             eval_input();

@@ -100,12 +100,6 @@ namespace clib {
         global_state.render_queue_auto.clear();
         std::swap(global_state.render_queue_bk, global_state.render_queue_auto_bk);
         global_state.render_queue_auto_bk.clear();
-        if (global_state.ui_hover.lock() && !global_state.ui_hover.lock()->is_render()) {
-            global_state.ui_hover.reset();
-        }
-        if (global_state.ui_focus.lock() && !global_state.ui_focus.lock()->is_render()) {
-            global_state.ui_focus.reset();
-        }
         global_state.painting = true;
     }
 
@@ -222,7 +216,7 @@ namespace clib {
         bool ascii_head = false;
         auto view_end = min(view + rows, line + 1);
 
-        auto num_k = js_get_num_length(view_end - 1);
+        auto num_k = max(js_get_num_length(view_end - 1), 1);
         CString line_no;
 
         if (!cached) {

@@ -24,17 +24,8 @@ void WindowMsgLoop::Run()
     freopen_s(&s1, "stdout.log", "w", stdout);
     freopen_s(&s2, "stderr.log", "w", stderr);
 
-    auto now = std::chrono::system_clock::now();
-
     while (Event()) {
-        using namespace std::chrono_literals;
-        auto last = std::chrono::system_clock::now();
-        auto dt = std::chrono::duration_cast<std::chrono::milliseconds>(last - now);
-        if (dt > 33ms) {
-            window->RedrawContent();
-            now = last;
-        }
-        Sleep(10);
+        WaitMessage();
     }
 
     if (s1)fclose(s1);
@@ -51,7 +42,7 @@ BOOL WindowMsgLoop::Event()
 
         BOOL ret = PumpMessage();
 
-        if (m_msg.message != WM_MOUSEMOVE && m_msg.message != WM_IME_NOTIFY && m_msg.message != WM_CHAR)
+        if (m_msg.message != WM_MOUSEMOVE && m_msg.message != WM_IME_NOTIFY && m_msg.message != WM_CHAR && m_msg.message != WM_TIMER && m_msg.message != WM_PAINT)
             return ret;
     }
 }

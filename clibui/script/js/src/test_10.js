@@ -22,7 +22,6 @@
             bottom: 2
         },
         weight: 1
-
     }));
     moving.push(new UI({
         type: 'rect',

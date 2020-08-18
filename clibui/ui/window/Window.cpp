@@ -40,7 +40,7 @@ static CString GetLastErrorStr() // Error Notification
     return buf;
 }
 
-Window *window;
+Window* window;
 
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -76,6 +76,7 @@ void Window::Init()
     d2dRenderTarget = std::make_shared<Direct2DRenderTarget>(shared_from_this());
     d2dRenderTarget->Init();
     engine.Initialize(d2dRenderTarget);
+    SetTimer(1, 33);
 }
 
 void Window::Run()
@@ -183,9 +184,9 @@ CSize Window::GetClientWindowSize()
 
 CSize Window::GetNonClientWindowSize()
 {
-	CRect rect;
-	GetClientRect(handle, &rect);
-	return (minSize + GetNonClientSize()).Max(rect.Size());
+    CRect rect;
+    GetClientRect(handle, &rect);
+    return (minSize + GetNonClientSize()).Max(rect.Size());
 }
 
 CString Window::GetTitle()
@@ -207,7 +208,7 @@ Window::WindowSizeState Window::GetSizeState()
 
 void Window::SetMinSize(CSize size)
 {
-	minSize = size;
+    minSize = size;
 }
 
 void Window::Show()
@@ -607,11 +608,11 @@ bool Window::HandleMessageInternal(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     }
     switch (uMsg)
     {
-    // ************************************** timer
+        // ************************************** timer
     case WM_TIMER:
         Timer(wParam);
         break;
-    // ************************************** moving and sizing
+        // ************************************** moving and sizing
     case WM_MOVING:
     case WM_SIZING:
     {
@@ -634,23 +635,23 @@ bool Window::HandleMessageInternal(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     case WM_MOVE:
     case WM_SIZE:
         Moved();
-    break;
-    // ************************************** state
+        break;
+        // ************************************** state
     case WM_ENABLE:
         wParam == TRUE ? Enabled() : Disabled();
-    break;
+        break;
     case WM_SETFOCUS:
         GotFocus();
-    break;
+        break;
     case WM_KILLFOCUS:
         LostFocus();
-    break;
+        break;
     case WM_ACTIVATE:
         wParam == WA_ACTIVE || wParam == WA_CLICKACTIVE ? Activated() : Deactivated();
-    break;
+        break;
     case WM_SHOWWINDOW:
         wParam == TRUE ? Opened() : Closed();
-    break;
+        break;
     case WM_CLOSE:
     {
         bool cancel = false;
@@ -777,8 +778,8 @@ bool Window::HandleMessageInternal(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     case WM_MOUSEHOVER:
         MouseHover();
         TrackMouse(true);
-    break;
-    // ************************************** key
+        break;
+        // ************************************** key
     case WM_KEYUP:
     {
         KeyInfo info = ConvertKey(wParam, lParam);
@@ -812,7 +813,7 @@ bool Window::HandleMessageInternal(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     // ************************************** painting
     case WM_PAINT:
         Paint();
-    break;
+        break;
     case WM_ERASEBKGND:
         result = 0;
         return true;
@@ -963,7 +964,7 @@ void Window::Created()
 void Window::Moving(CRect& bounds)
 {
     CRect oldBounds = GetBounds();
-	CSize minWindowSize = GetNonClientWindowSize();
+    CSize minWindowSize = GetNonClientWindowSize();
     if (bounds.Width() < minWindowSize.cx)
     {
         bounds.right = bounds.left + minWindowSize.cx;
@@ -1197,6 +1198,8 @@ void Window::Char(const KeyInfo& info)
 
 void Window::Timer(int id)
 {
+    if (id == 1)
+        RedrawContent();
 }
 
 void Window::ToggleFullscreen()

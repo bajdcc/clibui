@@ -45,6 +45,14 @@ namespace clib {
         return jsv_object::T_UI;
     }
 
+    int jsv_ui::get_element_type() const
+    {
+        if (element) {
+            return element->get_type();
+        }
+        return -1;
+    }
+
     void jsv_ui::add2(const std::string& s, const jsv_object::ref& obj, js_value_new* n)
     {
         add(s, obj->get(s, n));
@@ -96,6 +104,11 @@ namespace clib {
                     add2("color", obj, n);
                     add2("text", obj, n);
                     add2("background", obj, n);
+                    break;
+                }
+                if (type == "empty") {
+                    element = std::make_shared<js_ui_empty>();
+                    set_location(element, JS_O(shared_from_this()), obj, n);
                     break;
                 }
                 if (type == "root") {
@@ -423,6 +436,46 @@ namespace clib {
         if (current_stack)
             current_stack->stack.resize(size);
         return 0;
+    }
+
+    // ---------------------- EMPTY ----------------------
+
+    int js_ui_empty::get_type()
+    {
+        return js_ui_base::empty;
+    }
+
+    const char* js_ui_empty::get_type_str() const
+    {
+        return "empty";
+    }
+
+    void js_ui_empty::render()
+    {
+    }
+
+    void js_ui_empty::clear()
+    {
+    }
+
+    void js_ui_empty::change_target()
+    {
+    }
+
+    void js_ui_empty::add(const std::string& s, const js_value::ref& obj)
+    {
+        cjsgui::singleton().trigger_render();
+    }
+
+    void js_ui_empty::remove(const std::string& s)
+    {
+        cjsgui::singleton().trigger_render();
+    }
+
+    bool js_ui_empty::hit(int x, int y) const
+    {
+        auto bounds = CRect(left, top, left + width, top + height);
+        return bounds.PtInRect(CPoint(x, y));
     }
 
     // ---------------------- LABEL ----------------------

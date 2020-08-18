@@ -244,7 +244,7 @@ namespace clib {
         using ref = std::shared_ptr<js_ui_base>;
         using weak_ref = std::weak_ptr<js_ui_base>;
         enum type_t {
-            none,
+            empty,
             rect,
             round,
             label,
@@ -262,6 +262,21 @@ namespace clib {
         LONG top{ 0 };
         LONG width{ 0 };
         LONG height{ 0 };
+    };
+
+    class js_ui_empty : public js_ui_base {
+    public:
+        using ref = std::shared_ptr<js_ui_empty>;
+        using weak_ref = std::weak_ptr<js_ui_empty>;
+        js_ui_empty() = default;
+        int get_type() override;
+        const char* get_type_str() const override;
+        void render() override;
+        void clear() override;
+        void change_target() override;
+        void add(const std::string&, const js_value::ref&) override;
+        void remove(const std::string&) override;
+        bool hit(int, int) const override;
     };
 
     class js_ui_label : public js_ui_base {
@@ -337,6 +352,7 @@ namespace clib {
         using ref = std::shared_ptr<jsv_ui>;
         using weak_ref = std::weak_ptr<jsv_ui>;
         int get_object_type() const override;
+        int get_element_type() const;
         bool init(const jsv_object::ref& obj, js_value_new*);
         void render();
         void add(const std::string&, const js_value::weak_ref&) override;
