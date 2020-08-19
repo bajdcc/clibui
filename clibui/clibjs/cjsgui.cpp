@@ -79,6 +79,8 @@ namespace clib {
         global_state.render_queue_auto_bk.clear();
         global_state.ui_focus.reset();
         global_state.ui_hover.reset();
+        global_state.reboot = false;
+        global_state.stop = false;
     }
 
     void cjsgui::clear_cache()

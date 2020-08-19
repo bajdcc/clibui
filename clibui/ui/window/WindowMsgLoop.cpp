@@ -11,6 +11,16 @@ WindowMsgLoop::WindowMsgLoop()
     Msg_Init(m_msgMap);
 }
 
+static int paint_timer(HWND handle, int* flag) {
+    using namespace std::chrono_literals;
+    auto t = 33ms;
+    while (*flag == 0) {
+        PostMessage(handle, WM_PAINT, 0, 0);
+        std::this_thread::sleep_for(t);
+    }
+    return 0;
+}
+
 void WindowMsgLoop::Run()
 {
     WORD wVersionRequested;
@@ -24,9 +34,15 @@ void WindowMsgLoop::Run()
     freopen_s(&s1, "stdout.log", "w", stdout);
     freopen_s(&s2, "stderr.log", "w", stderr);
 
+    auto flag = 0;
+    auto fut = std::async(paint_timer, window->GetWindowHandle(), &flag);
+
     while (Event()) {
         WaitMessage();
     }
+    
+    flag = 1;
+    fut.wait();
 
     if (s1)fclose(s1);
     if (s2)fclose(s2);
@@ -85,34 +101,6 @@ BOOL WindowMsgLoop::PumpMessage()
     DispatchMessage(&m_msg);
 
     return TRUE;
-}
-
-BOOL WindowMsgLoop::IsIdleMessage(MSG* pMsg)
-{
-    // Return FALSE if the message just dispatched should _not_
-    // cause OnIdle to be run.  Messages which do not usually
-    // affect the state of the user interface and happen very
-    // often are checked for.
-
-    // redundant WM_MOUSEMOVE and WM_NCMOUSEMOVE
-    if (pMsg->message == WM_MOUSEMOVE || pMsg->message == WM_NCMOUSEMOVE || pMsg->message == WM_MOUSEWHEEL)
-    {
-        // mouse move at same position as last mouse move?
-        if (m_ptMousePos == pMsg->pt && pMsg->message == m_nMsgLast)
-            return FALSE;
-
-        m_ptMousePos = pMsg->pt;  // remember for next time
-        m_nMsgLast = pMsg->message;
-        return TRUE;
-    }
-
-    // WM_PAINT and WM_SYSTIMER (caret blink)
-    return pMsg->message != WM_PAINT && pMsg->message != 0x0118;
-}
-
-BOOL WindowMsgLoop::OnIdle(LONG lCount)
-{
-    return lCount < 0;
 }
 
 struct X_MAP_MESSAGE

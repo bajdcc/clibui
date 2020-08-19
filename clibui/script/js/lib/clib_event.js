@@ -29,5 +29,8 @@ Event.prototype.emit = function(type, obj, ...args) {
         this.listener[type].forEach(x => x.apply(obj, args));
     return this;
 };
+Event.prototype.has = function(type) {
+    return this.listener[type] && !!this.listener[type].length;
+};
 sys.event = new Event();
 return;

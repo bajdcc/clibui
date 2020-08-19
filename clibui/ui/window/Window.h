@@ -70,8 +70,6 @@ enum WindowEvent
     WE_SysKeyDown,
     WE_SysKeyUp,
     WE_Char,
-    WE_HttpGet = 400,
-    WE_HttpPost
 };
 
 class Window : public std::enable_shared_from_this<Window>

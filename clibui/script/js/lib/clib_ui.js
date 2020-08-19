@@ -5,6 +5,13 @@ UI.prototype.render = function(n) {
     if (n === 2)
         this.render_internal(n);
 };
+UI.prototype.resize = function() {
+    if (this.event && this.event.has('resize')) {
+        this.event.emit('resize', this);
+    } else {
+        this.map(x => x.resize());
+    }
+};
 UI.root = new UI({
     type: 'root',
     left: 0,
@@ -108,6 +115,7 @@ sys.send_signal = (function() {
         resize: function() {
             UI.root.width = sys.get_config('screen/width');
             UI.root.height = sys.get_config('screen/height');
+            UI.root.resize();
         },
         hit: function() {
             var obj = sys.get_config('hit/obj');

@@ -186,12 +186,6 @@ void JS2DEngine::Render(CComPtr<ID2D1RenderTarget> rt, CRect bounds)
         D2D1::RectF((float)bounds.right - 320, (float)bounds.top + 25, (float)bounds.right, (float)bounds.top + 50), logoBrush);
 
     if (GLOBAL_STATE.is_logging) {
-        logo = clib::cjsgui::singleton().get_disp(clib::types::D_STAT);
-        if (!logo.IsEmpty()) {
-            auto line = int(logo[0] - L'0');
-            rt->DrawText(logo.GetBuffer(0) + 1, logo.GetLength() - 1, loggingTF->textFormat,
-                D2D1::RectF((float)bounds.left + 10, (float)bounds.bottom - (line)*brushes.gbkFont.size, (float)bounds.left + 200, (float)bounds.bottom), logoBrush);
-        }
         const int span = loggingFont.size;
         const int wspan = brushes.gbkFont.size;
         auto R = D2D1::RectF((float)bounds.left + 10, (float)bounds.top + 10, (float)bounds.right - 10, (float)bounds.top + 60);
@@ -199,13 +193,11 @@ void JS2DEngine::Render(CComPtr<ID2D1RenderTarget> rt, CRect bounds)
             D2D1::RectF((float)bounds.left, (float)bounds.top, (float)bounds.right, (float)bounds.bottom),
             bg_log
         );
-        for (auto& l : GLOBAL_STATE.logging) {
-            rt->DrawText(l.GetBuffer(0), l.GetLength(), loggingTF->textFormat, R, logoBrush);
-            R.top += span;
-            R.bottom += span;
-            if (R.top + span >= bounds.bottom) {
-                break;
-            }
+        logo = clib::cjsgui::singleton().get_disp(clib::types::D_STAT);
+        if (!logo.IsEmpty()) {
+            auto line = int(logo[0] - L'0');
+            rt->DrawText(logo.GetBuffer(0) + 1, logo.GetLength() - 1, loggingTF->textFormat,
+                D2D1::RectF((float)bounds.left + 10, (float)bounds.bottom - (line)*brushes.gbkFont.size, (float)bounds.left + 200, (float)bounds.bottom), logoBrush);
         }
         R.top += span;
         R.bottom = (float)bounds.bottom;
@@ -254,5 +246,12 @@ void JS2DEngine::Render(CComPtr<ID2D1RenderTarget> rt, CRect bounds)
         }
         disp = clib::cjsgui::singleton().get_disp(clib::types::D_MEM);
         rt->DrawText(disp, disp.GetLength(), loggingTF->textFormat, R, logoBrush);
+    }
+
+    if (GLOBAL_STATE.reboot)
+        reset();
+    else if (GLOBAL_STATE.stop) {
+        paused = !paused;
+        GLOBAL_STATE.stop = false;
     }
 }

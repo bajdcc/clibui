@@ -11,16 +11,18 @@ UI.button = function(config) {
         hit: true,
         event: new Event({
             'resize': UI.get_layout("fill"),
+            'text': function(t) {
+                this[1].content = t;
+            },
             'enable': function(t) {
 
             },
-            'hit': function(t, x, y) {
-                console.log(t, x, y)
+            'hit': function(t) {
                 switch (t) {
                     case 'leftbuttondown':
                         this.focused = true;
                         this[0].color = this.bgcolor_focus;
-                        this.event.emit('click');
+                        this.event.emit('click', this);
                         break;
                     case 'leftbuttonup':
                         this.focused = false;
@@ -54,6 +56,8 @@ UI.button = function(config) {
         if (config.hasOwnProperty(i) && !parent.hasOwnProperty(i))
             parent[i] = config[i];
     }
+    if (parent.click)
+        parent.event.on('click', parent.click);
     var bg = new UI({
         type: 'round',
         color: parent.bgcolor,

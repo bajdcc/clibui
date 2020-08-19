@@ -1344,6 +1344,38 @@ namespace clib {
                 push(new_undefined());
                 break;
             }
+            // sys
+            v = code->get("sys", this);
+            if (v) {
+                if (v->is_primitive()) {
+                    push(new_string("invalid sys"));
+                    break;
+                }
+                auto _sys = JS_O(v);
+                auto sys = _sys->get_obj();
+                auto f = sys.find("show_log");
+                if (f != sys.end()) {
+                    GLOBAL_STATE.is_logging = f->second.lock()->to_bool();
+                }
+                f = sys.find("copy_console");
+                if (f != sys.end()) {
+                    cjsgui::singleton().output();
+                }
+                f = sys.find("set_running_state");
+                if (f != sys.end()) {
+                    GLOBAL_STATE.stop = true;
+                }
+                f = sys.find("reboot");
+                if (f != sys.end()) {
+                    GLOBAL_STATE.reboot = true;
+                }
+                f = sys.find("clear_cache");
+                if (f != sys.end()) {
+                    cjsgui::singleton().clear_cache();
+                }
+                push(new_undefined());
+                break;
+            }
             push(new_string("invalid config"));
         }
                                 break;

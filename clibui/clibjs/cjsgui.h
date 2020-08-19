@@ -33,14 +33,13 @@
 #define GUI_CYCLES 1000
 #define GUI_MAX_SPEED 4
 #define GUI_TICKS 16
-#define GUI_MAX_CYCLE_N 1000
+#define GUI_MAX_CYCLE_N 10000
 #define GUI_MAX_CYCLE (GUI_MAX_CYCLE_N / GUI_TICKS)
 #define GUI_MIN_CYCLE 10
 #define GUI_MIN_FPS_RATE 0.6
 #define GUI_MAX_FPS_RATE 0.9
 #define GUI_CYCLE_STABLE 100
 #define GUI_INPUT_CARET 15
-#define GUI_MEMORY (256 * 1024)
 #define GUI_SPECIAL_MASK 0x20000
 #define GUI_SCREEN_N 4
 
@@ -151,8 +150,9 @@ namespace clib {
             int mouse_y{ 0 };
             int window_focus{ -1 };
             int window_hover{ -1 };
-            std::list<CString> logging;
             bool is_logging{ false };
+            bool reboot{ false };
+            bool stop{ false };
             libZPlay::ZPlay* zplay{ nullptr };
             std::vector<char> zplay_data;
             std::string zplay_title;

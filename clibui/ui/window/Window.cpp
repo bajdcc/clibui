@@ -76,7 +76,6 @@ void Window::Init()
     d2dRenderTarget = std::make_shared<Direct2DRenderTarget>(shared_from_this());
     d2dRenderTarget->Init();
     engine.Initialize(d2dRenderTarget);
-    SetTimer(1, 33);
 }
 
 void Window::Run()
@@ -1148,16 +1147,19 @@ void Window::MouseMoving(const MouseInfo& info)
 
 void Window::MouseEntered()
 {
+    clib::cjsgui::singleton().hit(WE_MouseMoving);
     PostNoArgMsg(WE_MouseEntered);
 }
 
 void Window::MouseLeaved()
 {
+    clib::cjsgui::singleton().hit(WE_MouseMoving);
     PostNoArgMsg(WE_MouseLeaved);
 }
 
 void Window::MouseHover()
 {
+    clib::cjsgui::singleton().hit(WE_MouseHover);
     PostNoArgMsg(WE_MouseHover);
 }
 
@@ -1198,8 +1200,6 @@ void Window::Char(const KeyInfo& info)
 
 void Window::Timer(int id)
 {
-    if (id == 1)
-        RedrawContent();
 }
 
 void Window::ToggleFullscreen()

@@ -11,8 +11,6 @@ public:
     void Run();
     BOOL Event();
     BOOL PumpMessage();
-    BOOL IsIdleMessage(MSG* pMsg);
-    BOOL OnIdle(LONG lCount);
 
     using MSGMAP = std::unordered_map<UINT, CString>;
     LPCTSTR DebugGetMessageName(UINT message);
