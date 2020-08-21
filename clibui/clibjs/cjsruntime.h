@@ -583,7 +583,7 @@ namespace clib {
         void clear_frame();
 
         void ui_hit(const js_value::ref&, const std::string&);
-        void hit(int n);
+        bool hit(int n);
 
     private:
         int run(const cjs_code &code);
@@ -765,8 +765,6 @@ namespace clib {
             std::unordered_set<jsv_ui::ref> elements;
             js_value::weak_ref hit;
             std::string hit_n;
-            double hit_x;
-            double hit_y;
             std::deque<std::string> signals;
             int frames{ 0 };
         } global_ui;

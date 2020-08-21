@@ -33,7 +33,7 @@
             },
             hit: true,
             event: new Event({
-                'hit': function(t, x, y) {
+                'hit': function(t, x, y, wheel) {
                     if (t === 'leftbuttondown') {
                         if (solve.length && time < solve.length) {
                             if (last !== -1) {
@@ -51,7 +51,7 @@
                             time++;
                         }
                     }
-                    console.log(this.type, this.left, this.top, this.color, t, x, y);
+                    console.log(this.type, this.left, this.top, this.color, t, x, y, wheel);
                 }
             })
         }));

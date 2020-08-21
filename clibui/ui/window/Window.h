@@ -211,27 +211,27 @@ protected:
     void Destroying();
     void Destroyed();
 
-    void LeftButtonDown(const MouseInfo& info);
-    void LeftButtonUp(const MouseInfo& info);
-    void LeftButtonDoubleClick(const MouseInfo& info);
-    void RightButtonDown(const MouseInfo& info);
-    void RightButtonUp(const MouseInfo& info);
-    void RightButtonDoubleClick(const MouseInfo& info);
-    void MiddleButtonDown(const MouseInfo& info);
-    void MiddleButtonUp(const MouseInfo& info);
-    void MiddleButtonDoubleClick(const MouseInfo& info);
-    void HorizontalWheel(const MouseInfo& info);
-    void VerticalWheel(const MouseInfo& info);
-    void MouseMoving(const MouseInfo& info);
+    void LeftButtonDown();
+    void LeftButtonUp();
+    void LeftButtonDoubleClick();
+    void RightButtonDown();
+    void RightButtonUp();
+    void RightButtonDoubleClick();
+    void MiddleButtonDown();
+    void MiddleButtonUp();
+    void MiddleButtonDoubleClick();
+    void HorizontalWheel();
+    void VerticalWheel();
+    void MouseMoving();
     void MouseEntered();
     void MouseLeaved();
     void MouseHover();
 
-    void KeyDown(const KeyInfo& info);
-    void KeyUp(const KeyInfo& info);
-    void SysKeyDown(const KeyInfo& info);
-    void SysKeyUp(const KeyInfo& info);
-    void Char(const KeyInfo& info);
+    void KeyDown();
+    void KeyUp();
+    void SysKeyDown();
+    void SysKeyUp();
+    void Char();
 
     void Timer(int id);
 

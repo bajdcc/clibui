@@ -6,6 +6,7 @@
 #include "stdafx.h"
 #include "cjsruntime.h"
 #include "cjsgui.h"
+#include <ui\window\Window.h>
 
 namespace clib {
 
@@ -241,22 +242,18 @@ namespace clib {
     {
         global_ui.hit = obj;
         global_ui.hit_n = n;
-        global_ui.hit_x = (double)GLOBAL_STATE.mouse_x;
-        global_ui.hit_y = (double)GLOBAL_STATE.mouse_y;
         global_ui.signals.push_front("hit");
         eval_ui(true);
         global_ui.hit.reset();
         global_ui.hit_n.clear();
-        global_ui.hit_x = 0;
-        global_ui.hit_y = 0;
     }
 
     extern bool js_trans(const js_value::ref& obj);
 
-    void cjsruntime::hit(int n)
+    bool cjsruntime::hit(int n)
     {
-        if (n == 212 || n == 6 || n == 7)
-            return;
+        if (n == WE_MouseEntered || n == WE_GotFocus || n == WE_LostFocus)
+            return false;
         if (GLOBAL_STATE.drawing && permanents.state != 0) {
             if (cjsgui::singleton().begin_render()) {
                 for (auto& e : global_ui.elements) {
@@ -265,81 +262,72 @@ namespace clib {
                 auto result = eval_ui(false);
                 cjsgui::singleton().end_render();
                 if (result != 0)
-                    return;
+                    return false;
             }
         }
-        if (n == 213) {
+        if (n == WE_MouseLeaved) {
             auto& hover = GLOBAL_STATE.ui_hover;
             if (hover.lock()) {
                 ui_hit(hover.lock(), "mouseleave");
             }
-            return;
+            return true;
         }
-        if (n == 214) {
+        if (n == WE_MouseHover) {
             auto& hover = GLOBAL_STATE.ui_hover;
             if (hover.lock()) {
                 ui_hit(hover.lock(), "mousehover");
             }
-            return;
+            return true;
         }
         const auto& wnds = GLOBAL_STATE.render_queue_bk;
         if (wnds.empty())
-            return;
-        auto mouse_x = GLOBAL_STATE.mouse_x - GLOBAL_STATE.bound.left;
-        auto mouse_y = GLOBAL_STATE.mouse_y - GLOBAL_STATE.bound.top;
+            return false;
+        auto mouse_x = GLOBAL_STATE.mouseInfo.pt.x - GLOBAL_STATE.bound.left;
+        auto mouse_y = GLOBAL_STATE.mouseInfo.pt.y - GLOBAL_STATE.bound.top;
         for (const auto& i : wnds) {
             auto j = i.lock();
-            if (js_trans(j->get("hit"))&& j->hit(mouse_x, mouse_y)) {
+            if (js_trans(j->get("hit")) && j->hit(mouse_x, mouse_y)) {
                 switch (n) {
-                case 6:
-                    ui_hit(j, "gotfocus");
-                    break;
-                case 7:
-                    ui_hit(j, "lostfocus");
-                    break;
-                case 200:
+                case WE_LeftButtonDown:
                     ui_hit(j, "leftbuttondown");
                     break;
-                case 201:
+                case WE_LeftButtonUp:
                     ui_hit(j, "leftbuttonup");
                     break;
-                case 202:
+                case WE_LeftButtonDoubleClick:
                     ui_hit(j, "leftbuttondoubleclick");
                     break;
-                case 203:
+                case WE_RightButtonDown:
                     ui_hit(j, "rightbuttondown");
                     break;
-                case 204:
+                case WE_RightButtonUp:
                     ui_hit(j, "rightbuttonup");
                     break;
-                case 205:
+                case WE_RightButtonDoubleClick:
                     ui_hit(j, "rightbuttondoubleclick");
                     break;
-                case 206:
+                case WE_MiddleButtonDown:
                     ui_hit(j, "middlebuttondown");
                     break;
-                case 207:
+                case WE_MiddleButtonUp:
                     ui_hit(j, "middlebuttonup");
                     break;
-                case 208:
+                case WE_MiddleButtonDoubleClick:
                     ui_hit(j, "middlebuttondoubleclick");
                     break;
-                case 209:
+                case WE_HorizontalWheel:
                     ui_hit(j, "horizontalwheel");
                     break;
-                case 210:
+                case WE_VerticalWheel:
                     ui_hit(j, "verticalwheel");
                     break;
-                case 211:
+                case WE_MouseMoving:
                     ui_hit(j, "mousemove");
                     break;
-                case 212:
-                    ui_hit(j, "mouseenter");
-                    break;
-                case 213:
+                case WE_MouseLeaved:
                     ui_hit(j, "mouseleave");
                     break;
-                case 214:
+                case WE_MouseHover:
                     ui_hit(j, "mousehover");
                     break;
                 default: {
@@ -347,9 +335,9 @@ namespace clib {
                     ss << "Unknown hit type: " << n;
                     ui_hit(j, ss.str());
                 }
-                    break;
+                       break;
                 }
-                if (n == 211) {
+                if (n == WE_MouseMoving) {
                     auto& hover = GLOBAL_STATE.ui_hover;
                     if (hover.lock()) {
                         if (hover.lock() != j) {
@@ -363,7 +351,7 @@ namespace clib {
                         ui_hit(hover.lock(), "mouseenter");
                     }
                 }
-                else if (n >= 200 && n <= 208) {
+                else if (n >= WE_LeftButtonDown && n <= WE_MiddleButtonDoubleClick) {
                     auto& focus = GLOBAL_STATE.ui_focus;
                     if (focus.lock()) {
                         if (focus.lock() != j) {
@@ -377,23 +365,25 @@ namespace clib {
                         ui_hit(focus.lock(), "gotfocus");
                     }
                 }
-                return;
+                return true;
             }
         }
-        if (n == 211) {
+        if (n == WE_MouseMoving) {
             auto& hover = GLOBAL_STATE.ui_hover;
             if (hover.lock()) {
                 ui_hit(hover.lock(), "mouseleave");
                 hover.reset();
             }
         }
-        else if (n >= 200 && n <= 208) {
+        else if (n >= WE_LeftButtonDown && n <= WE_MiddleButtonDoubleClick) {
             auto& focus = GLOBAL_STATE.ui_focus;
             if (focus.lock()) {
                 ui_hit(focus.lock(), "lostfocus");
                 focus.reset();
             }
         }
+        else return false;
+        return true;
     }
 
     int cjsruntime::eval_ui(bool signal) {

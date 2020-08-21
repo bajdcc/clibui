@@ -10,6 +10,7 @@
 #include <array>
 #include <deque>
 #include <regex>
+#include <ui\window\window.h>
 #include <ui\gdi\Gdi.h>
 #include <clibjs\JS2D.h>
 #include <clibjs\cjstypes.h>
@@ -146,8 +147,8 @@ namespace clib {
 #if LOG_VM
             std::vector<string_t> log_info, log_err;
 #endif
-            int mouse_x{ 0 };
-            int mouse_y{ 0 };
+            MouseInfo mouseInfo;
+            KeyInfo keyInfo;
             int window_focus{ -1 };
             int window_hover{ -1 };
             bool is_logging{ false };
@@ -207,6 +208,7 @@ namespace clib {
             uint32_t color_bg{ 0 };
             uint32_t color_fg{ 0xffffff };
             int scroll_fade{ 0 };
+            CRect scroll_rect;
             int old_line{ 0 };
             int old_view{ 0 };
             global_input_t input;

@@ -500,7 +500,7 @@ void Window::Redraw()
 
 MouseInfo Window::ConvertMouse(WPARAM wParam, LPARAM lParam, bool wheelMessage, bool nonClient)
 {
-    MouseInfo info;
+    auto& info = GLOBAL_STATE.mouseInfo;
 
     info.nonClient = false;
     if (nonClient)
@@ -567,7 +567,7 @@ MouseInfo Window::ConvertMouse(WPARAM wParam, LPARAM lParam, bool wheelMessage, 
 
 KeyInfo Window::ConvertKey(WPARAM wParam, LPARAM lParam)
 {
-    KeyInfo info;
+    auto& info = GLOBAL_STATE.keyInfo;
     info.code = wParam;
     info.scan = HIWORD(lParam) & 0x01FF;
     info.ctrl = IsKeyPressing(VK_CONTROL);
@@ -663,82 +663,82 @@ bool Window::HandleMessageInternal(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         nonClient = true;
     case WM_LBUTTONDOWN:
     {
-        MouseInfo info = ConvertMouse(wParam, lParam, false, nonClient);
-        LeftButtonDown(info);
+        GLOBAL_STATE.mouseInfo = ConvertMouse(wParam, lParam, false, nonClient);
+        LeftButtonDown();
     }
     break;
     case WM_NCLBUTTONUP:
         nonClient = true;
     case WM_LBUTTONUP:
     {
-        MouseInfo info = ConvertMouse(wParam, lParam, false, nonClient);
-        LeftButtonUp(info);
+        GLOBAL_STATE.mouseInfo = ConvertMouse(wParam, lParam, false, nonClient);
+        LeftButtonUp();
     }
     break;
     case WM_NCLBUTTONDBLCLK:
         nonClient = true;
     case WM_LBUTTONDBLCLK:
     {
-        MouseInfo info = ConvertMouse(wParam, lParam, false, nonClient);
-        LeftButtonDoubleClick(info);
+        GLOBAL_STATE.mouseInfo = ConvertMouse(wParam, lParam, false, nonClient);
+        LeftButtonDoubleClick();
     }
     break;
     case WM_NCRBUTTONDOWN:
         nonClient = true;
     case WM_RBUTTONDOWN:
     {
-        MouseInfo info = ConvertMouse(wParam, lParam, false, nonClient);
-        RightButtonDown(info);
+        GLOBAL_STATE.mouseInfo = ConvertMouse(wParam, lParam, false, nonClient);
+        RightButtonDown();
     }
     break;
     case WM_NCRBUTTONUP:
         nonClient = true;
     case WM_RBUTTONUP:
     {
-        MouseInfo info = ConvertMouse(wParam, lParam, false, nonClient);
-        RightButtonUp(info);
+        GLOBAL_STATE.mouseInfo = ConvertMouse(wParam, lParam, false, nonClient);
+        RightButtonUp();
     }
     break;
     case WM_NCRBUTTONDBLCLK:
         nonClient = true;
     case WM_RBUTTONDBLCLK:
     {
-        MouseInfo info = ConvertMouse(wParam, lParam, false, nonClient);
-        RightButtonDoubleClick(info);
+        GLOBAL_STATE.mouseInfo = ConvertMouse(wParam, lParam, false, nonClient);
+        RightButtonDoubleClick();
     }
     break;
     case WM_NCMBUTTONDOWN:
         nonClient = true;
     case WM_MBUTTONDOWN:
     {
-        MouseInfo info = ConvertMouse(wParam, lParam, false, nonClient);
-        MiddleButtonDown(info);
+        GLOBAL_STATE.mouseInfo = ConvertMouse(wParam, lParam, false, nonClient);
+        MiddleButtonDown();
     }
     break;
     case WM_NCMBUTTONUP:
         nonClient = true;
     case WM_MBUTTONUP:
     {
-        MouseInfo info = ConvertMouse(wParam, lParam, false, nonClient);
-        MiddleButtonUp(info);
+        GLOBAL_STATE.mouseInfo = ConvertMouse(wParam, lParam, false, nonClient);
+        MiddleButtonUp();
     }
     break;
     case WM_NCMBUTTONDBLCLK:
         nonClient = true;
     case WM_MBUTTONDBLCLK:
     {
-        MouseInfo info = ConvertMouse(wParam, lParam, false, nonClient);
-        MiddleButtonDoubleClick(info);
+        GLOBAL_STATE.mouseInfo = ConvertMouse(wParam, lParam, false, nonClient);
+        MiddleButtonDoubleClick();
     }
     break;
     case WM_NCMOUSEMOVE:
         nonClient = true;
     case WM_MOUSEMOVE:
     {
-        MouseInfo info = ConvertMouse(wParam, lParam, false, nonClient);
-        if (info.pt != mouseLast)
+        GLOBAL_STATE.mouseInfo = ConvertMouse(wParam, lParam, false, nonClient);
+        if (GLOBAL_STATE.mouseInfo.pt != mouseLast)
         {
-            MouseMoving(info);
+            MouseMoving();
             if (!mouseHoving)
             {
                 mouseHoving = true;
@@ -751,14 +751,14 @@ bool Window::HandleMessageInternal(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     // ************************************** wheel
     case WM_MOUSEHWHEEL:
     {
-        MouseInfo info = ConvertMouse(wParam, lParam, true, false);
-        HorizontalWheel(info);
+        GLOBAL_STATE.mouseInfo = ConvertMouse(wParam, lParam, true, false);
+        HorizontalWheel();
     }
     break;
     case WM_MOUSEWHEEL:
     {
-        MouseInfo info = ConvertMouse(wParam, lParam, true, false);
-        VerticalWheel(info);
+        GLOBAL_STATE.mouseInfo = ConvertMouse(wParam, lParam, true, false);
+        VerticalWheel();
     }
     break;
     // ************************************** mouse state
@@ -781,32 +781,32 @@ bool Window::HandleMessageInternal(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         // ************************************** key
     case WM_KEYUP:
     {
-        KeyInfo info = ConvertKey(wParam, lParam);
-        KeyUp(info);
+        GLOBAL_STATE.keyInfo = ConvertKey(wParam, lParam);
+        KeyUp();
     }
     break;
     case WM_KEYDOWN:
     {
-        KeyInfo info = ConvertKey(wParam, lParam);
-        KeyDown(info);
+        GLOBAL_STATE.keyInfo = ConvertKey(wParam, lParam);
+        KeyDown();
     }
     break;
     case WM_SYSKEYUP:
     {
-        KeyInfo info = ConvertKey(wParam, lParam);
-        SysKeyUp(info);
+        GLOBAL_STATE.keyInfo = ConvertKey(wParam, lParam);
+        SysKeyUp();
     }
     break;
     case WM_SYSKEYDOWN:
     {
-        KeyInfo info = ConvertKey(wParam, lParam);
-        SysKeyDown(info);
+        GLOBAL_STATE.keyInfo = ConvertKey(wParam, lParam);
+        SysKeyDown();
     }
     break;
     case WM_CHAR:
     {
-        KeyInfo info = ConvertKey(wParam, lParam);
-        Char(info);
+        GLOBAL_STATE.keyInfo = ConvertKey(wParam, lParam);
+        Char();
     }
     break;
     // ************************************** painting
@@ -1061,87 +1061,63 @@ static void PostMouseMsg(WindowEvent evt)
     clib::cjsgui::singleton().hit(evt);
 }
 
-void Window::LeftButtonDown(const MouseInfo& info)
+void Window::LeftButtonDown()
 {
-    GLOBAL_STATE.mouse_x = info.pt.x;
-    GLOBAL_STATE.mouse_y = info.pt.y;
     PostMouseMsg(WE_LeftButtonDown);
 }
 
-void Window::LeftButtonUp(const MouseInfo& info)
+void Window::LeftButtonUp()
 {
-    GLOBAL_STATE.mouse_x = info.pt.x;
-    GLOBAL_STATE.mouse_y = info.pt.y;
     PostMouseMsg(WE_LeftButtonUp);
 }
 
-void Window::LeftButtonDoubleClick(const MouseInfo& info)
+void Window::LeftButtonDoubleClick()
 {
-    GLOBAL_STATE.mouse_x = info.pt.x;
-    GLOBAL_STATE.mouse_y = info.pt.y;
     PostMouseMsg(WE_LeftButtonDoubleClick);
 }
 
-void Window::RightButtonDown(const MouseInfo& info)
+void Window::RightButtonDown()
 {
-    GLOBAL_STATE.mouse_x = info.pt.x;
-    GLOBAL_STATE.mouse_y = info.pt.y;
     PostMouseMsg(WE_RightButtonDown);
 }
 
-void Window::RightButtonUp(const MouseInfo& info)
+void Window::RightButtonUp()
 {
-    GLOBAL_STATE.mouse_x = info.pt.x;
-    GLOBAL_STATE.mouse_y = info.pt.y;
     PostMouseMsg(WE_RightButtonUp);
 }
 
-void Window::RightButtonDoubleClick(const MouseInfo& info)
+void Window::RightButtonDoubleClick()
 {
-    GLOBAL_STATE.mouse_x = info.pt.x;
-    GLOBAL_STATE.mouse_y = info.pt.y;
     PostMouseMsg(WE_RightButtonDoubleClick);
 }
 
-void Window::MiddleButtonDown(const MouseInfo& info)
+void Window::MiddleButtonDown()
 {
-    GLOBAL_STATE.mouse_x = info.pt.x;
-    GLOBAL_STATE.mouse_y = info.pt.y;
     PostMouseMsg(WE_MiddleButtonDown);
 }
 
-void Window::MiddleButtonUp(const MouseInfo& info)
+void Window::MiddleButtonUp()
 {
-    GLOBAL_STATE.mouse_x = info.pt.x;
-    GLOBAL_STATE.mouse_y = info.pt.y;
     PostMouseMsg(WE_MiddleButtonUp);
 }
 
-void Window::MiddleButtonDoubleClick(const MouseInfo& info)
+void Window::MiddleButtonDoubleClick()
 {
-    GLOBAL_STATE.mouse_x = info.pt.x;
-    GLOBAL_STATE.mouse_y = info.pt.y;
     PostMouseMsg(WE_MiddleButtonDoubleClick);
 }
 
-void Window::HorizontalWheel(const MouseInfo& info)
+void Window::HorizontalWheel()
 {
-    GLOBAL_STATE.mouse_x = info.pt.x;
-    GLOBAL_STATE.mouse_y = info.pt.y;
     PostMouseMsg(WE_HorizontalWheel);
 }
 
-void Window::VerticalWheel(const MouseInfo& info)
+void Window::VerticalWheel()
 {
-    GLOBAL_STATE.mouse_x = info.pt.x;
-    GLOBAL_STATE.mouse_y = info.pt.y;
     PostMouseMsg(WE_VerticalWheel);
 }
 
-void Window::MouseMoving(const MouseInfo& info)
+void Window::MouseMoving()
 {
-    GLOBAL_STATE.mouse_x = info.pt.x;
-    GLOBAL_STATE.mouse_y = info.pt.y;
     PostMouseMsg(WE_MouseMoving);
 }
 
@@ -1167,34 +1143,34 @@ static void PostKeyMsg(WindowEvent evt)
 {
 }
 
-void Window::KeyDown(const KeyInfo& info)
+void Window::KeyDown()
 {
-    if (info.code == VK_F11) {
+    if (GLOBAL_STATE.keyInfo.code == VK_F11) {
         ToggleFullscreen();
     }
-    clib::cjsgui::singleton().input(info.code | GUI_SPECIAL_MASK);
+    clib::cjsgui::singleton().input(GLOBAL_STATE.keyInfo.code | GUI_SPECIAL_MASK);
     PostKeyMsg(WE_KeyDown);
 }
 
-void Window::KeyUp(const KeyInfo& info)
+void Window::KeyUp()
 {
     PostKeyMsg(WE_KeyUp);
 }
 
-void Window::SysKeyDown(const KeyInfo& info)
+void Window::SysKeyDown()
 {
-    clib::cjsgui::singleton().input(info.code | GUI_SPECIAL_MASK);
+    clib::cjsgui::singleton().input(GLOBAL_STATE.keyInfo.code | GUI_SPECIAL_MASK);
     PostKeyMsg(WE_SysKeyDown);
 }
 
-void Window::SysKeyUp(const KeyInfo& info)
+void Window::SysKeyUp()
 {
     PostKeyMsg(WE_SysKeyUp);
 }
 
-void Window::Char(const KeyInfo& info)
+void Window::Char()
 {
-    clib::cjsgui::singleton().input(info.code);
+    clib::cjsgui::singleton().input(GLOBAL_STATE.keyInfo.code);
     PostKeyMsg(WE_Char);
 }
 

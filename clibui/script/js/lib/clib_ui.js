@@ -122,8 +122,9 @@ sys.send_signal = (function() {
             var type = sys.get_config('hit/type');
             var x = sys.get_config('hit/x');
             var y = sys.get_config('hit/y');
+            var wheel = sys.get_config('hit/wheel');
             if (obj && obj.event) {
-                obj.event.emit('hit', obj, type, x, y);
+                obj.event.emit('hit', obj, type, x, y, wheel);
             }
         }
     };

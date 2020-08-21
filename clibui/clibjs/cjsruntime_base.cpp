@@ -1412,11 +1412,15 @@ namespace clib {
                         break;
                     }
                     else if (var[1] == "x") {
-                        push(new_number(global_ui.hit_x));
+                        push(new_number((double)GLOBAL_STATE.mouseInfo.pt.x));
                         break;
                     }
                     else if (var[1] == "y") {
-                        push(new_number(global_ui.hit_y));
+                        push(new_number((double)GLOBAL_STATE.mouseInfo.pt.y));
+                        break;
+                    }
+                    else if (var[1] == "wheel") {
+                        push(new_number((double)GLOBAL_STATE.mouseInfo.wheel));
                         break;
                     }
                 }

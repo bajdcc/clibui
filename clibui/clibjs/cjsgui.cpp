@@ -81,6 +81,8 @@ namespace clib {
         global_state.ui_hover.reset();
         global_state.reboot = false;
         global_state.stop = false;
+        ZeroMemory(&global_state.mouseInfo, sizeof(global_state.mouseInfo));
+        ZeroMemory(&global_state.keyInfo, sizeof(global_state.keyInfo));
     }
 
     void cjsgui::clear_cache()
@@ -334,6 +336,7 @@ namespace clib {
         // Draw scroll
         // 0:stop,1-0xf:fade in,0x10-0x1f:show,0x20-0x2f:fade out
         auto& scroll_fade = scr.scroll_fade;
+        auto& scroll_rect = scr.scroll_rect;
         auto& old_line = scr.old_line;
         auto& old_view = scr.old_view;
         if (old_line != line || old_view != view) {
@@ -387,6 +390,7 @@ namespace clib {
                 int _x2 = _x + 20;
                 int _y2 = _y + rows * GUI_FONT_H;
                 auto r = D2D1::RectF((float)_x, (float)_y, (float)_x2, (float)_y2);
+                scroll_rect = CRect(bounds.left + x, _y, _x2, _y2);
                 b->SetColor(D2D1::ColorF(62.0f / 255.0f, 62.0f / 255.0f, 66.0f / 255.0f, a));
                 rt->FillRectangle(r, b);
                 auto h2 = rows * GUI_FONT_H - 10;
@@ -2057,8 +2061,30 @@ namespace clib {
 
     void cjsgui::hit(int n)
     {
-        if (vm)
-            vm->hit(n);
+        if (vm) {
+            if (!vm->hit(n)) {
+                if (n == WE_VerticalWheel) {
+                    auto& scr = *screens[screen_ptr].get();
+                    auto& scroll_rect = scr.scroll_rect;
+                    if (scroll_rect.PtInRect(global_state.mouseInfo.pt)) {
+                        auto dr = global_state.mouseInfo.wheel <= 0;
+                        auto dt = abs(global_state.mouseInfo.wheel) / GUI_FONT_H;
+                        if (dt != 0) {
+                            auto& cols = scr.cols;
+                            auto& rows = scr.rows;
+                            auto& view = scr.view;
+                            auto& line = scr.line;
+                            if (dr) {
+                                view = min(line - rows + 1, view + dt);
+                            }
+                            else {
+                                view = max(0, view - dt);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     int cjsgui::cursor() const

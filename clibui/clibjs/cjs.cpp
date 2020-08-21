@@ -47,9 +47,9 @@ namespace clib {
     {
     }
 
-    void cjs::hit(int n)
+    bool cjs::hit(int n)
     {
-        rt.hit(n);
+        return rt.hit(n);
     }
 
     bool cjs::try_input(int c, bool ch)

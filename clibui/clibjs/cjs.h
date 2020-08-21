@@ -23,7 +23,7 @@ namespace clib {
 
         void resize();
         void reset_ips();
-        void hit(int n);
+        bool hit(int n);
         bool try_input(int c, bool ch = true);
         int cursor() const;
         void clear_cache();
