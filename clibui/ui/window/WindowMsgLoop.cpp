@@ -17,6 +17,9 @@ static int paint_timer(HWND handle, int* flag) {
     while (*flag == 0) {
         PostMessage(handle, WM_PAINT, 0, 0);
         std::this_thread::sleep_for(t);
+        if (!IsWindow(handle)) {
+            break;
+        }
     }
     return 0;
 }

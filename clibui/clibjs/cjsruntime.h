@@ -249,6 +249,7 @@ namespace clib {
             round,
             label,
             qr,
+            image,
         };
         virtual int get_type() = 0;
         virtual const char* get_type_str() const = 0;
@@ -345,6 +346,23 @@ namespace clib {
         bool hit(int, int) const override;
     private:
         cjsrender_qr::ref qr;
+    };
+
+    class js_ui_image : public js_ui_base {
+    public:
+        using ref = std::shared_ptr<js_ui_image>;
+        using weak_ref = std::weak_ptr<js_ui_image>;
+        js_ui_image();
+        int get_type() override;
+        const char* get_type_str() const override;
+        void render() override;
+        void clear() override;
+        void change_target() override;
+        void add(const std::string&, const js_value::ref&) override;
+        void remove(const std::string&) override;
+        bool hit(int, int) const override;
+    private:
+        cjsrender_image::ref image;
     };
 
     class jsv_ui : public jsv_object {

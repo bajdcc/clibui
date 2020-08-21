@@ -76,6 +76,7 @@
     <ClCompile Include="clibjs\cjsmem.cpp" />
     <ClCompile Include="clibjs\cjsparser.cpp" />
     <ClCompile Include="clibjs\cjsrender.cpp" />
+    <ClCompile Include="clibjs\cjsrender_image.cpp" />
     <ClCompile Include="clibjs\cjsruntime.cpp" />
     <ClCompile Include="clibjs\cjsruntime_base.cpp" />
     <ClCompile Include="clibjs\cjsruntime_http.cpp" />

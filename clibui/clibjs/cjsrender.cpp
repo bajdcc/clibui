@@ -17,6 +17,7 @@ namespace clib {
         cjsrender_round_renderer::register_element();
         cjsrender_label_renderer::register_element();
         cjsrender_qr_renderer::register_element();
+        cjsrender_image_renderer::register_element();
     }
 
     bool cjsrender::register_element_factory(cjsrender_element_factory::ref factory)

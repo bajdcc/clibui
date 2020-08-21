@@ -29,6 +29,7 @@ namespace clib {
         r_round,
         r_label,
         r_qr,
+        r_image,
     };
 
     class cjsrender_element_base : public std::enable_shared_from_this<cjsrender_element_base>
@@ -362,6 +363,83 @@ namespace clib {
         CComPtr<ID2D1Bitmap> bitmap;
     };
 #pragma endregion qr
+
+#pragma region image
+    class cjsrender_image : public cjsrender_element<cjsrender_image>
+    {
+    public:
+        using ref = std::shared_ptr<cjsrender_image>;
+        using weak_ref = std::weak_ptr<cjsrender_image>;
+
+        cjsrender_image() = default;
+        ~cjsrender_image();
+
+        static std::string get_name();
+
+        int get_type()override;
+
+        void set_data(const std::vector<char>& value);
+        const char* get_data() const;
+        size_t get_data_len() const;
+
+    protected:
+        std::vector<char> data;
+    };
+
+    class cjsrender_image_renderer : public cjsrender_renderer<cjsrender_image, cjsrender_image_renderer, Direct2DRenderTarget>
+    {
+    public:
+        void render(CRect bounds, CComPtr<ID2D1RenderTarget>)override;
+        void init2()override;
+        void destroy2()override;
+    private:
+        HRESULT GetRawFrame(UINT uFrameIndex);
+        HRESULT GetGlobalMetadata();
+        HRESULT GetBackgroundColor(CComPtr<IWICMetadataQueryReader> pMetadataQueryReader);
+
+        HRESULT ComposeNextFrame();
+        HRESULT DisposeCurrentFrame();
+        HRESULT OverlayNextFrame();
+
+        HRESULT SaveComposedFrame();
+        HRESULT RestoreSavedFrame();
+        HRESULT ClearCurrentFrameArea();
+
+        HRESULT CalculateDrawRectangle(D2D1_RECT_F& drawRect, const CRect& rcClient);
+
+        bool IsLastFrame() const;
+        bool EndOfAnimation() const;
+
+        enum DISPOSAL_METHODS
+        {
+            DM_UNDEFINED = 0,
+            DM_NONE = 1,
+            DM_BACKGROUND = 2,
+            DM_PREVIOUS = 3
+        };
+        CComPtr<ID2D1Bitmap> bitmap;
+        std::chrono::system_clock::time_point timer;
+        // Refer: https://code.msdn.microsoft.com/windowsapps/Windows-Imaging-Component-65abbc6a
+        CComPtr<ID2D1BitmapRenderTarget> m_pFrameComposeRT;
+        CComPtr<ID2D1Bitmap> m_pRawFrame;
+        CComPtr<ID2D1Bitmap> m_pSavedFrame; // The temporary bitmap used for disposal 3 method
+        CComPtr<IWICBitmapDecoder> m_pDecoder;
+        D2D1_COLOR_F    m_backgroundColor;
+
+        unsigned int    m_uNextFrameIndex{ 0 };
+        unsigned int    m_uTotalLoopCount{ 0 };  // The number of loops for which the animation will be played
+        unsigned int    m_uLoopNumber{ 0 };      // The current animation loop number (e.g. 1 when the animation is first played)
+        bool            m_fHasLoop{ false };     // Whether the gif has a loop
+        unsigned int    m_cFrames{ 0 };
+        unsigned int    m_uFrameDisposal{ 0 };
+        unsigned int    m_uFrameDelay{ 0 };
+        unsigned int    m_cxGifImage{ 0 };
+        unsigned int    m_cyGifImage{ 0 };
+        unsigned int    m_cxGifImagePixel{ 0 };  // Width of the displayed image in pixel calculated using pixel aspect ratio
+        unsigned int    m_cyGifImagePixel{ 0 };  // Height of the displayed image in pixel calculated using pixel aspect ratio
+        D2D1_RECT_F     m_framePosition{ 0, 0, 0, 0 };
+    };
+#pragma endregion image
 }
 
 #endif

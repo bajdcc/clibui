@@ -931,6 +931,13 @@ void Window::Render()
 
 void Window::RenderInternal()
 {
+    using namespace std::chrono_literals;
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now() - timer) < 33ms) {
+        return;
+    }
+    timer = std::chrono::system_clock::now();
+
     d2dRenderTarget->StartRendering();
 
     engine.Render(d2dRenderTarget->GetDirect2DRenderTarget(), CRect(CPoint(), GetClientWindowSize()));
@@ -1053,6 +1060,9 @@ void Window::Destroyed()
         ::KillTimer(handle, timer);
     }
     setTimer.clear();
+    engine.Finalize();
+    
+    clib::cjsgui::singleton().reset();
     PostNoArgMsg(WE_Destroyed);
 }
 

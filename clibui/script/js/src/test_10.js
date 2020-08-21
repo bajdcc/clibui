@@ -44,15 +44,21 @@
             setTimeout(m, 200);
         }
     }, 200);
-    var qr = new UI({
-        type: 'qr',
-        color: 'rgb(0,122,204)',
-        background: 'rgba(0,0,0,0)',
-        left: 120,
-        top: 100,
-        width: 100,
-        height: 100,
-        text: "https://github.com/bajdcc"
-    });
-    UI.root.push(qr);
+    sys.http({
+        method: 'get',
+        url: "http://www.sucaijishi.com/uploadfile/2015/0210/20150210104951657.gif",
+        callback: function(data) {
+            if (data.result === "success" && data.code === 200) {
+                var image = new UI({
+                    type: 'image',
+                    left: 120,
+                    top: 300,
+                    width: 100,
+                    height: 100,
+                    data: data.body
+                });
+                UI.root.push(image);
+            }
+        }
+    })
 })();

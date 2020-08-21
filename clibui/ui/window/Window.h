@@ -249,6 +249,7 @@ protected:
     JS2DEngine engine;
 
 private:
+    std::chrono::system_clock::time_point timer;
     CSize minSize{ 200, 200 };
     bool fullScreen{ false };
     bool rendering{ false };

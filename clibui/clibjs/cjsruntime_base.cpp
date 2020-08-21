@@ -789,7 +789,7 @@ namespace clib {
         permanents.f_ui->add("length", _int_1);
         permanents.f_ui->name = "UI";
         permanents.f_ui->builtin = [](auto& func, auto& _this, auto& args, auto& js, auto attr) {
-            return js.call_api(API_UI_new, _this, args, 0);
+return js.call_api(API_UI_new, _this, args, 0);
         };
         permanents._proto_ui_render_internal = _new_function(nullptr, js_value::at_const | js_value::at_readonly);
         permanents._proto_ui_render_internal->add("length", _int_2);
@@ -889,6 +889,7 @@ namespace clib {
                 }
             }
         }
+        global_ui.elements.clear();
     }
 
     std::string cjsruntime::js_base64_encode(const std::vector<char>& data)

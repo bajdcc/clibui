@@ -107,6 +107,12 @@ namespace clib {
                     add2("background", obj, n);
                     break;
                 }
+                if (type == "image") {
+                    element = std::make_shared<js_ui_image>();
+                    set_location(element, JS_O(shared_from_this()), obj, n);
+                    add2("data", obj, n);
+                    break;
+                }
                 if (type == "empty") {
                     element = std::make_shared<js_ui_empty>();
                     set_location(element, JS_O(shared_from_this()), obj, n);
@@ -850,6 +856,73 @@ namespace clib {
     }
 
     bool js_ui_qr::hit(int x, int y) const
+    {
+        auto bounds = CRect(left, top, left + width, top + height);
+        return bounds.PtInRect(CPoint(x, y));
+    }
+
+    // ---------------------- IMAGE ----------------------
+
+    js_ui_image::js_ui_image()
+    {
+        image = cjsrender_image::create();
+        change_target();
+    }
+
+    int js_ui_image::get_type()
+    {
+        return js_ui_base::image;
+    }
+
+    const char* js_ui_image::get_type_str() const
+    {
+        return "image";
+    }
+
+    void js_ui_image::render()
+    {
+        auto bounds = CRect(left, top, left + width, top + height);
+        image->get_renderer()->render(bounds, GLOBAL_STATE.renderTarget);
+    }
+
+    void js_ui_image::clear()
+    {
+        image->get_renderer()->destroy2();
+    }
+
+    void js_ui_image::change_target()
+    {
+        image->get_renderer()->on_changed();
+    }
+
+    void js_ui_image::add(const std::string& s, const js_value::ref& obj)
+    {
+        if (s == "data") {
+            if (!obj->is_primitive()) {
+                auto buffer = JS_O(obj);
+                auto b = buffer->get_buffer();
+                image->set_data(b);
+            }
+            else
+                return;
+        }
+        else
+            return;
+        cjsgui::singleton().trigger_render();
+    }
+
+    void js_ui_image::remove(const std::string& s)
+    {
+        if (s == "data") {
+            std::vector<char> d;
+            image->set_data(d);
+        }
+        else
+            return;
+        cjsgui::singleton().trigger_render();
+    }
+
+    bool js_ui_image::hit(int x, int y) const
     {
         auto bounds = CRect(left, top, left + width, top + height);
         return bounds.PtInRect(CPoint(x, y));
