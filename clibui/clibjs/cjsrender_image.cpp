@@ -28,6 +28,22 @@ namespace clib {
         return r_image;
     }
 
+    bool cjsrender_image::is_full() const
+    {
+        return full;
+    }
+
+    void cjsrender_image::set_full(bool value)
+    {
+        full = value;
+        if (renderer)
+        {
+            renderer->destroy2();
+            if (!data.empty())
+                renderer->on_changed();
+        }
+    }
+
     void cjsrender_image::set_data(const std::vector<char>& value)
     {
         data = value;
@@ -89,14 +105,17 @@ namespace clib {
 
                 if (SUCCEEDED(hr))
                 {
-                    // Draw the bitmap onto the calculated rectangle
-                    r->DrawBitmap(
-                        bitmap,
+                    auto rt = e->is_full() ?
+                        D2D1::RectF((FLOAT)bounds.left, (FLOAT)bounds.top, (FLOAT)bounds.right, (FLOAT)bounds.bottom) :
                         D2D1::RectF(
                             __max(bounds.left + drawRect.left, (FLOAT)bounds.left),
                             __max(bounds.top + drawRect.top, (FLOAT)bounds.top),
                             __min(bounds.left + drawRect.right, (FLOAT)bounds.right),
-                            __min(bounds.top + drawRect.bottom, (FLOAT)bounds.bottom)),
+                            __min(bounds.top + drawRect.bottom, (FLOAT)bounds.bottom));
+                    // Draw the bitmap onto the calculated rectangle
+                    r->DrawBitmap(
+                        bitmap,
+                        rt,
                         1.0f,
                         D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
                     );
@@ -180,6 +199,11 @@ namespace clib {
             m_pDecoder = nullptr;
         if (m_pFrameComposeRT)
             m_pFrameComposeRT = nullptr;
+    }
+
+    bool cjsrender_image_renderer::is_dynamic() const
+    {
+        return m_cFrames > 1;
     }
 
 

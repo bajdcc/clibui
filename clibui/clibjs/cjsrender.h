@@ -64,6 +64,7 @@ namespace clib {
         virtual void destroy2() = 0;
         virtual void render(CRect bounds, CComPtr<ID2D1RenderTarget> = nullptr) = 0;
         virtual void on_changed() = 0;
+        virtual bool is_dynamic() const = 0;
         virtual CSize get_min_size() = 0;
     };
 
@@ -188,6 +189,10 @@ namespace clib {
         {
             destroy2();
             init2();
+        }
+        bool is_dynamic() const override
+        {
+            return false;
         }
         virtual void render(CRect bounds, CComPtr<ID2D1RenderTarget> rt) = 0;
 
@@ -378,11 +383,14 @@ namespace clib {
 
         int get_type()override;
 
+        bool is_full() const;
+        void set_full(bool value);
         void set_data(const std::vector<char>& value);
         const char* get_data() const;
         size_t get_data_len() const;
 
     protected:
+        bool full{ false };;
         std::vector<char> data;
     };
 
@@ -392,6 +400,7 @@ namespace clib {
         void render(CRect bounds, CComPtr<ID2D1RenderTarget>)override;
         void init2()override;
         void destroy2()override;
+        bool is_dynamic() const override;
     private:
         HRESULT GetRawFrame(UINT uFrameIndex);
         HRESULT GetGlobalMetadata();

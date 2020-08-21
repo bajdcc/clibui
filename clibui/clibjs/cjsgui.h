@@ -165,6 +165,10 @@ namespace clib {
             CComPtr<ID2D1Bitmap> bitmapConsole;
             CComPtr<ID2D1RenderTarget> renderTargetConsole;
             CComPtr<ID2D1BitmapRenderTarget> renderTarget_bitmapConsole;
+            std::vector<jsv_ui::weak_ref> dynamics;
+            CComPtr<ID2D1Bitmap> bitmapDynamic;
+            CComPtr<ID2D1RenderTarget> renderTargetDynamic;
+            CComPtr<ID2D1BitmapRenderTarget> renderTarget_bitmapDynamic;
             int total_obj{ 0 };
             int cache_obj{ 0 };
             bool drawing{ false };

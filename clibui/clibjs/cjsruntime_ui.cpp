@@ -111,6 +111,7 @@ namespace clib {
                     element = std::make_shared<js_ui_image>();
                     set_location(element, JS_O(shared_from_this()), obj, n);
                     add2("data", obj, n);
+                    add2("full", obj, n);
                     break;
                 }
                 if (type == "empty") {
@@ -216,6 +217,14 @@ namespace clib {
     {
         if (element) {
             return element->hit(x, y);
+        }
+        return false;
+    }
+
+    bool jsv_ui::is_dynamic() const
+    {
+        if (element) {
+            return element->is_dynamic();
         }
         return false;
     }
@@ -474,6 +483,11 @@ namespace clib {
         return bounds.PtInRect(CPoint(x, y));
     }
 
+    bool js_ui_empty::is_dynamic() const
+    {
+        return false;
+    }
+
     // ---------------------- LABEL ----------------------
 
     js_ui_label::js_ui_label()
@@ -630,6 +644,11 @@ namespace clib {
         return bounds.PtInRect(CPoint(x, y));
     }
 
+    bool js_ui_label::is_dynamic() const
+    {
+        return false;
+    }
+
     // ---------------------- RECT ----------------------
 
     js_ui_rect::js_ui_rect()
@@ -700,6 +719,11 @@ namespace clib {
     {
         auto bounds = CRect(left, top, left + width, top + height);
         return bounds.PtInRect(CPoint(x, y));
+    }
+
+    bool js_ui_rect::is_dynamic() const
+    {
+        return false;
     }
 
     // ---------------------- ROUND ----------------------
@@ -778,6 +802,11 @@ namespace clib {
     {
         auto bounds = CRect(left, top, left + width, top + height);
         return bounds.PtInRect(CPoint(x, y));
+    }
+
+    bool js_ui_round::is_dynamic() const
+    {
+        return false;
     }
 
     // ---------------------- QR ----------------------
@@ -861,6 +890,11 @@ namespace clib {
         return bounds.PtInRect(CPoint(x, y));
     }
 
+    bool js_ui_qr::is_dynamic() const
+    {
+        return false;
+    }
+
     // ---------------------- IMAGE ----------------------
 
     js_ui_image::js_ui_image()
@@ -906,6 +940,9 @@ namespace clib {
             else
                 return;
         }
+        else if (s == "full") {
+            image->set_full(obj->to_bool());
+        }
         else
             return;
         cjsgui::singleton().trigger_render();
@@ -917,6 +954,9 @@ namespace clib {
             std::vector<char> d;
             image->set_data(d);
         }
+        else if (s == "full") {
+            image->set_full(false);
+        }
         else
             return;
         cjsgui::singleton().trigger_render();
@@ -926,5 +966,10 @@ namespace clib {
     {
         auto bounds = CRect(left, top, left + width, top + height);
         return bounds.PtInRect(CPoint(x, y));
+    }
+
+    bool js_ui_image::is_dynamic() const
+    {
+        return image->get_renderer()->is_dynamic();
     }
 }

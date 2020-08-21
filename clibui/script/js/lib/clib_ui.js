@@ -1,7 +1,11 @@
 UI.prototype.render = function(n) {
     if (n === 1)
         this.render_internal(n);
-    this.map(x => x.render(n));
+    this.forEach(x => {
+        if (x && x instanceof UI) {
+            x.render(n);
+        }
+    });
     if (n === 2)
         this.render_internal(n);
 };
@@ -109,13 +113,17 @@ UI.get_layout = (function() {
 sys.send_signal = (function() {
     const map_signal = {
         render: function() {
-            UI.root.render(1);
-            UI.root.render(2);
+            if (UI.root && UI.root instanceof UI) {
+                UI.root.render(1);
+                UI.root.render(2);
+            }
         },
         resize: function() {
-            UI.root.width = sys.get_config('screen/width');
-            UI.root.height = sys.get_config('screen/height');
-            UI.root.resize();
+            if (UI.root && UI.root instanceof UI) {
+                UI.root.width = sys.get_config('screen/width');
+                UI.root.height = sys.get_config('screen/height');
+                UI.root.resize();
+            }
         },
         hit: function() {
             var obj = sys.get_config('hit/obj');

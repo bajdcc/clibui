@@ -259,6 +259,7 @@ namespace clib {
         virtual void add(const std::string&, const js_value::ref&) = 0;
         virtual void remove(const std::string&) = 0;
         virtual bool hit(int, int) const = 0;
+        virtual bool is_dynamic() const = 0;
         LONG left{ 0 };
         LONG top{ 0 };
         LONG width{ 0 };
@@ -278,6 +279,7 @@ namespace clib {
         void add(const std::string&, const js_value::ref&) override;
         void remove(const std::string&) override;
         bool hit(int, int) const override;
+        bool is_dynamic() const override;
     };
 
     class js_ui_label : public js_ui_base {
@@ -293,6 +295,7 @@ namespace clib {
         void add(const std::string&, const js_value::ref&) override;
         void remove(const std::string&) override;
         bool hit(int, int) const override;
+        bool is_dynamic() const override;
     private:
         cjsrender_label::ref label;
     };
@@ -310,6 +313,7 @@ namespace clib {
         void add(const std::string&, const js_value::ref&) override;
         void remove(const std::string&) override;
         bool hit(int, int) const override;
+        bool is_dynamic() const override;
     private:
         cjsrender_rect::ref rect;
     };
@@ -327,6 +331,7 @@ namespace clib {
         void add(const std::string&, const js_value::ref&) override;
         void remove(const std::string&) override;
         bool hit(int, int) const override;
+        bool is_dynamic() const override;
     private:
         cjsrender_round::ref round;
     };
@@ -344,6 +349,7 @@ namespace clib {
         void add(const std::string&, const js_value::ref&) override;
         void remove(const std::string&) override;
         bool hit(int, int) const override;
+        bool is_dynamic() const override;
     private:
         cjsrender_qr::ref qr;
     };
@@ -361,6 +367,7 @@ namespace clib {
         void add(const std::string&, const js_value::ref&) override;
         void remove(const std::string&) override;
         bool hit(int, int) const override;
+        bool is_dynamic() const override;
     private:
         cjsrender_image::ref image;
     };
@@ -379,6 +386,7 @@ namespace clib {
         void set_render(bool);
         bool is_render() const;
         bool hit(int, int) const;
+        bool is_dynamic() const;
     private:
         void add2(const std::string&, const jsv_object::ref&, js_value_new*);
     private:

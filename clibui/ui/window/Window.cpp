@@ -933,7 +933,7 @@ void Window::RenderInternal()
 {
     using namespace std::chrono_literals;
     if (std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::system_clock::now() - timer) < 33ms) {
+        std::chrono::system_clock::now() - timer) < 10ms) {
         return;
     }
     timer = std::chrono::system_clock::now();

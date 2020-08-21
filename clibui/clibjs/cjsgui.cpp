@@ -454,17 +454,38 @@ namespace clib {
         if (global_state.canvas.lock() && !global_state.bound.IsRectEmpty()) {
             if (global_state.renderTarget) {
                 if (global_state.painting) {
+                    global_state.dynamics.clear();
                     global_state.painting = false;
                     global_state.renderTarget->BeginDraw();
                     global_state.renderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White, 0));
                     for (const auto& s : global_state.render_queue) {
-                        if (s.lock()) {
-                            s.lock()->render();
+                        auto s2 = s.lock();
+                        if (s2) {
+                            if (s2->is_dynamic()) {
+                                global_state.dynamics.push_back(s2);
+                            }
+                            else {
+                                s2->render();
+                            }
                         }
                     }
                     global_state.renderTarget->EndDraw();
                     global_state.bitmap = nullptr;
                     global_state.renderTarget_bitmap->GetBitmap(&global_state.bitmap);
+                    if (global_state.dynamics.empty()) {
+                        if (global_state.renderTargetDynamic) {
+                            global_state.renderTargetDynamic = nullptr;
+                            global_state.bitmapDynamic = nullptr;
+                            global_state.renderTarget_bitmapDynamic = nullptr;
+                        }
+                    }
+                    else {
+                        if (!global_state.renderTargetDynamic) {
+                            global_state.renderTarget_bitmapDynamic = global_state.canvas.lock()->CreateBitmapRenderTarget(
+                                D2D1::SizeF((float)global_state.bound.Width(), (float)global_state.bound.Height()));
+                            global_state.renderTargetDynamic = global_state.renderTarget_bitmapDynamic;
+                        }
+                    }
                 }
             }
             if (global_state.bitmap) {
@@ -489,6 +510,27 @@ namespace clib {
             if (global_state.bitmapConsole) {
                 rt->DrawBitmap(
                     global_state.bitmapConsole,
+                    D2D1::RectF((FLOAT)bounds.left, (FLOAT)bounds.top, (FLOAT)bounds.right, (FLOAT)bounds.bottom),
+                    1.0f,
+                    D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
+                );
+            }
+            if (global_state.renderTargetDynamic) {
+                global_state.renderTargetDynamic->BeginDraw();
+                global_state.renderTargetDynamic->Clear(D2D1::ColorF(D2D1::ColorF::White, 0));
+                global_state.renderTarget = global_state.renderTargetDynamic;
+                for (auto& s : global_state.dynamics) {
+                    if (s.lock())
+                        s.lock()->render();
+                }
+                global_state.renderTargetDynamic->EndDraw();
+                global_state.bitmapDynamic = nullptr;
+                global_state.renderTarget_bitmapDynamic->GetBitmap(&global_state.bitmapDynamic);
+                global_state.renderTarget = global_state.renderTarget_bitmap;
+            }
+            if (global_state.bitmapDynamic) {
+                rt->DrawBitmap(
+                    global_state.bitmapDynamic,
                     D2D1::RectF((FLOAT)bounds.left, (FLOAT)bounds.top, (FLOAT)bounds.right, (FLOAT)bounds.bottom),
                     1.0f,
                     D2D1_BITMAP_INTERPOLATION_MODE_LINEAR

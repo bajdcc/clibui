@@ -52,9 +52,10 @@
                 var image = new UI({
                     type: 'image',
                     left: 120,
-                    top: 300,
-                    width: 100,
-                    height: 100,
+                    top: 250,
+                    width: 50,
+                    height: 50,
+                    full: true,
                     data: data.body
                 });
                 UI.root.push(image);
