@@ -111,7 +111,7 @@ public:
 
     enum CursorType
     {
-        arrow = 1,
+        arrow = 0,
         hand,
         ibeam,
         size_left,

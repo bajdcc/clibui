@@ -25,7 +25,6 @@ namespace clib {
         void reset_ips();
         bool hit(int n);
         bool try_input(int c, bool ch = true);
-        int cursor() const;
         void clear_cache();
 
         bool run(int cycle, int& cycles);

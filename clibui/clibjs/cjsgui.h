@@ -70,7 +70,6 @@ namespace clib {
         void input(int c);
         int reset_cycles();
         void hit(int n);
-        int cursor() const;
         void output() const;
 
         CString get_disp(types::disp_t) const;
@@ -182,6 +181,7 @@ namespace clib {
             std::vector<jsv_ui::weak_ref> render_queue_auto_bk;
             jsv_ui::weak_ref ui_focus;
             jsv_ui::weak_ref ui_hover;
+            int cursor{ 0 };
         } global_state;
         class screen_t {
         public:

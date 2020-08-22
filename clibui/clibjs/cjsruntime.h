@@ -387,11 +387,13 @@ namespace clib {
         bool is_render() const;
         bool hit(int, int) const;
         bool is_dynamic() const;
+        int get_cursor() const;
     private:
         void add2(const std::string&, const jsv_object::ref&, js_value_new*);
     private:
         std::shared_ptr<js_ui_base> element;
         bool render_state{ false };
+        int cursor{ 0 };
     };
 
     class jsv_null : public js_value {

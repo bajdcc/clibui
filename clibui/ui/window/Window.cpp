@@ -892,6 +892,33 @@ bool Window::HandleMessageInternal(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         if (hitTestResult == HTCLIENT)
         {
             decltype(IDC_ARROW) idc = IDC_ARROW;
+            auto c = GLOBAL_STATE.cursor;
+            switch (c)
+            {
+            case Window::hand:
+                idc = IDC_HAND;
+                break;
+            case Window::ibeam:
+                idc = IDC_IBEAM;
+                break;
+            case Window::size_left:
+                idc = IDC_SIZEWE;
+                break;
+            case Window::size_top:
+                idc = IDC_SIZENS;
+                break;
+            case Window::size_topleft:
+                idc = IDC_SIZENWSE;
+                break;
+            case Window::size_topright:
+                idc = IDC_SIZENESW;
+                break;
+            case Window::wait:
+                idc = IDC_WAIT;
+                break;
+            default:
+                break;
+            }
             HCURSOR cursorHandle = LoadCursor(NULL, idc);
             if (::GetCursor() != cursorHandle)
             {

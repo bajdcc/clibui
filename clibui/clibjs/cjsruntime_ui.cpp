@@ -34,6 +34,14 @@ namespace clib {
         return (float)num;
     }
 
+    static std::string obj2str(const js_value::weak_ref& obj) {
+        auto o = obj.lock();
+        if (o->get_type() != r_string) {
+            return "";
+        }
+        return JS_STR(o);
+    }
+
     static void set_location(const js_ui_base::ref &u, const jsv_object::ref& _this, const jsv_object::ref& obj, js_value_new* n) {
         _this->add("left", obj->get("left", n));
         _this->add("top", obj->get("top", n));
@@ -69,54 +77,26 @@ namespace clib {
                 auto type = JS_STR(v);
                 if (type == "label") {
                     element = std::make_shared<js_ui_label>();
-                    set_location(element, JS_O(shared_from_this()), obj, n);
-                    add2("color", obj, n);
-                    add2("content", obj, n);
-                    add2("font", obj, n);
-                    add2("size", obj, n);
-                    add2("bold", obj, n);
-                    add2("italic", obj, n);
-                    add2("underline", obj, n);
-                    add2("strikeline", obj, n);
-                    add2("antialias", obj, n);
-                    add2("verticalAntialias", obj, n);
-                    add2("align", obj, n);
-                    add2("valign", obj, n);
                     break;
                 }
                 if (type == "rect") {
                     element = std::make_shared<js_ui_rect>();
-                    set_location(element, JS_O(shared_from_this()), obj, n);
-                    add2("color", obj, n);
-                    add2("fill", obj, n);
                     break;
                 }
                 if (type == "round") {
                     element = std::make_shared<js_ui_round>();
-                    set_location(element, JS_O(shared_from_this()), obj, n);
-                    add2("color", obj, n);
-                    add2("fill", obj, n);
-                    add2("radius", obj, n);
                     break;
                 }
                 if (type == "qr") {
                     element = std::make_shared<js_ui_qr>();
-                    set_location(element, JS_O(shared_from_this()), obj, n);
-                    add2("color", obj, n);
-                    add2("text", obj, n);
-                    add2("background", obj, n);
                     break;
                 }
                 if (type == "image") {
                     element = std::make_shared<js_ui_image>();
-                    set_location(element, JS_O(shared_from_this()), obj, n);
-                    add2("data", obj, n);
-                    add2("full", obj, n);
                     break;
                 }
                 if (type == "empty") {
                     element = std::make_shared<js_ui_empty>();
-                    set_location(element, JS_O(shared_from_this()), obj, n);
                     break;
                 }
                 if (type == "root") {
@@ -158,6 +138,17 @@ namespace clib {
             cjsgui::singleton().trigger_render();
             return;
         }
+        if (s == "cursor") {
+            auto c = obj2str(obj);
+            if (c == "hand") { cursor = Window::CursorType::hand; }
+            else if (c == "ibeam") { cursor = Window::CursorType::ibeam; }
+            else if (c == "size_left") { cursor = Window::CursorType::size_left; }
+            else if (c == "size_top") { cursor = Window::CursorType::size_top; }
+            else if (c == "size_topleft") { cursor = Window::CursorType::size_topleft; }
+            else if (c == "size_topright") { cursor = Window::CursorType::size_topright; }
+            else if (c == "wait") { cursor = Window::CursorType::wait; }
+            else cursor = 0;
+        }
         if (element) {
             if (s == "left")
                 element->left = obj2num(obj);
@@ -179,6 +170,9 @@ namespace clib {
     {
         if (s == "type")return;
         jsv_object::remove(s);
+        if (s == "cursor") {
+            cursor = 0;
+        }
         if (element) {
             if (s == "left")
                 element->left = 0;
@@ -227,6 +221,11 @@ namespace clib {
             return element->is_dynamic();
         }
         return false;
+    }
+
+    int jsv_ui::get_cursor() const
+    {
+        return cursor;
     }
 
     void cjsruntime::send_signal(const std::string& s)
@@ -284,6 +283,8 @@ namespace clib {
             auto& hover = GLOBAL_STATE.ui_hover;
             if (hover.lock()) {
                 ui_hit(hover.lock(), "mouseleave");
+                GLOBAL_STATE.cursor = 0;
+                hover.reset();
             }
             return true;
         }
@@ -365,6 +366,7 @@ namespace clib {
                         hover = i;
                         ui_hit(hover.lock(), "mouseenter");
                     }
+                    GLOBAL_STATE.cursor = hover.lock()->get_cursor();
                 }
                 else if (n >= WE_LeftButtonDown && n <= WE_MiddleButtonDoubleClick) {
                     auto& focus = GLOBAL_STATE.ui_focus;
@@ -387,6 +389,7 @@ namespace clib {
             auto& hover = GLOBAL_STATE.ui_hover;
             if (hover.lock()) {
                 ui_hit(hover.lock(), "mouseleave");
+                GLOBAL_STATE.cursor = 0;
                 hover.reset();
             }
         }

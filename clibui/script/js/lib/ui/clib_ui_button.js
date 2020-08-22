@@ -9,6 +9,7 @@ UI.button = function(config) {
         enter: false,
         focused: false,
         hit: true,
+        cursor: "hand",
         event: new Event({
             'resize': UI.get_layout("fill"),
             'text': function(t) {

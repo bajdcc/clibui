@@ -57,11 +57,6 @@ namespace clib {
         return true;
     }
 
-    int cjs::cursor() const
-    {
-        return 0;
-    }
-
     void cjs::clear_cache()
     {
         rt.clear_cache();

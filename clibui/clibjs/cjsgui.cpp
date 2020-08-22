@@ -2129,13 +2129,6 @@ namespace clib {
         }
     }
 
-    int cjsgui::cursor() const
-    {
-        if (vm)
-            return vm->cursor();
-        return 1;
-    }
-
     void cjsgui::output() const
     {
         auto& scr = *screens[screen_id].get();
