@@ -62,6 +62,11 @@ namespace clib {
         return -1;
     }
 
+    std::weak_ptr<js_ui_base> jsv_ui::get_element() const
+    {
+        return element;
+    }
+
     void jsv_ui::add2(const std::string& s, const jsv_object::ref& obj, js_value_new* n)
     {
         add(s, obj->get(s, n));

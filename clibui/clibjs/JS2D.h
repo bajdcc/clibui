@@ -10,7 +10,7 @@ public:
 
     void Initialize(std::shared_ptr<Direct2DRenderTarget> rt);
     void Finalize();
-    void Reset(std::shared_ptr<Direct2DRenderTarget> oldRenderTarget, std::shared_ptr<Direct2DRenderTarget> newRenderTarget);
+    void Resize();
 
     struct BrushBag {
         Font cmdFont; std::shared_ptr<D2DTextFormatPackage> cmdTF;

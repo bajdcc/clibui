@@ -1284,6 +1284,15 @@ namespace clib {
         return { scr.cols * GUI_FONT_W, scr.rows * GUI_FONT_H };
     }
 
+    void cjsgui::resize_ui()
+    {
+        if (global_state.renderTargetDynamic) {
+            global_state.bitmapDynamic = nullptr;
+            global_state.renderTargetDynamic = nullptr;
+            global_state.renderTarget_bitmapDynamic = nullptr;
+        }
+    }
+
     CString cjsgui::get_disp(types::disp_t t) const
     {
         static TCHAR sz[256];
@@ -1305,6 +1314,20 @@ namespace clib {
                         s.AppendFormat(L"%02X", (BYTE)scr.buffer[i * scr.cols + j]);
                     else
                         s.Append(L"  ");
+                }
+                s.Append(L"\n");
+            }
+            s.Append(L"UI:\n");
+            for (size_t i = 0; i < global_state.render_queue.size(); i++) {
+                s.AppendFormat(L"%d |", i);
+                const auto k = global_state.render_queue[i].lock();
+                auto _e = k->get_element();
+                if (_e.lock()) {
+                    auto e = _e.lock();
+                    s.AppendFormat(L" %S (%d,%d,%dx%d)", e->get_type_str(), e->left, e->top, e->width, e->height);
+                    auto flag = 0;
+                    if (global_state.ui_focus.lock() == k) s.Append(L" focus");
+                    if (global_state.ui_hover.lock() == k) s.Append(L" hover");
                 }
                 s.Append(L"\n");
             }

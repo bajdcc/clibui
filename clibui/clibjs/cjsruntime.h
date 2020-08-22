@@ -378,6 +378,7 @@ namespace clib {
         using weak_ref = std::weak_ptr<jsv_ui>;
         int get_object_type() const override;
         int get_element_type() const;
+        std::weak_ptr<js_ui_base> get_element() const;
         bool init(const jsv_object::ref& obj, js_value_new*);
         void render();
         void add(const std::string&, const js_value::weak_ref&) override;

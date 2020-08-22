@@ -1016,6 +1016,7 @@ void Window::Moved()
         if (size != GetClientWindowSize()) {
             size = GetClientWindowSize();
             Direct2D::Singleton().Resize();
+            engine.Resize();
             Render();
         }
     }

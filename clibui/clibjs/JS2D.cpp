@@ -71,6 +71,11 @@ void JS2DEngine::Finalize()
     font_format = nullptr;
 }
 
+void JS2DEngine::Resize()
+{
+    clib::cjsgui::singleton().resize_ui();
+}
+
 void JS2DEngine::reset()
 {
     clib::cjsgui::singleton().reset();

@@ -65,6 +65,7 @@ namespace clib {
         void set_ticks(int ticks);
         void resize(int rows, int cols);
         CSize get_size() const;
+        void resize_ui();
 
         void input_set(bool valid);
         void input(int c);
