@@ -30,6 +30,7 @@ namespace clib {
         r_label,
         r_qr,
         r_image,
+        r_svg,
     };
 
     class cjsrender_element_base : public std::enable_shared_from_this<cjsrender_element_base>
@@ -354,7 +355,6 @@ namespace clib {
     protected:
         CColor color;
         CColor background{ 255,255,255 };
-        bool fill{ true };
         std::string text;
     };
 
@@ -390,7 +390,7 @@ namespace clib {
         size_t get_data_len() const;
 
     protected:
-        bool full{ false };;
+        bool full{ false };
         std::vector<char> data;
     };
 
@@ -449,6 +449,41 @@ namespace clib {
         D2D1_RECT_F     m_framePosition{ 0, 0, 0, 0 };
     };
 #pragma endregion image
+
+#pragma region svg
+    class cjsrender_svg : public cjsrender_element<cjsrender_svg>
+    {
+    public:
+        using ref = std::shared_ptr<cjsrender_svg>;
+        using weak_ref = std::weak_ptr<cjsrender_svg>;
+
+        cjsrender_svg() = default;
+        ~cjsrender_svg();
+
+        static std::string get_name();
+
+        int get_type()override;
+
+        std::string get_text() const;
+        void set_text(const std::string& value);
+        CColor get_background() const;
+        void set_background(CColor value);
+
+    protected:
+        CColor background{ 255,255,255 };
+        std::string text;
+    };
+
+    class cjsrender_svg_renderer : public cjsrender_renderer<cjsrender_svg, cjsrender_svg_renderer, Direct2DRenderTarget>
+    {
+    public:
+        void render(CRect bounds, CComPtr<ID2D1RenderTarget>)override;
+        void init2()override;
+        void destroy2()override;
+    private:
+        CComPtr<ID2D1Bitmap> bitmap;
+    };
+#pragma endregion svg
 }
 
 #endif

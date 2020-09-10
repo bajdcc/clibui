@@ -153,6 +153,12 @@
     <ClInclude Include="libqrencode\split.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="nanosvg\nanosvg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="nanosvg\nanosvgrast.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -288,6 +294,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="clibjs\cjsrender_image.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="nanosvg\nanosvg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="nanosvg\nanosvgrast.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

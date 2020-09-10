@@ -50,6 +50,8 @@
     <ClInclude Include="libqrencode\rscode.h" />
     <ClInclude Include="libqrencode\split.h" />
     <ClInclude Include="libzplay\libzplay.h" />
+    <ClInclude Include="nanosvg\nanosvg.h" />
+    <ClInclude Include="nanosvg\nanosvgrast.h" />
     <ClInclude Include="nlohmann_json\json.h" />
     <ClInclude Include="render\Direct2D.h" />
     <ClInclude Include="render\Direct2DRenderTarget.h" />
@@ -115,6 +117,8 @@
     <ClCompile Include="libqrencode\split.c">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="nanosvg\nanosvg.cpp" />
+    <ClCompile Include="nanosvg\nanosvgrast.cpp" />
     <ClCompile Include="render\Direct2D.cpp" />
     <ClCompile Include="render\Direct2DRenderTarget.cpp" />
     <ClCompile Include="restclient-cpp\connection.cpp" />

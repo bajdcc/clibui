@@ -100,6 +100,10 @@ namespace clib {
                     element = std::make_shared<js_ui_image>();
                     break;
                 }
+                if (type == "svg") {
+                    element = std::make_shared<js_ui_svg>();
+                    break;
+                }
                 if (type == "empty") {
                     element = std::make_shared<js_ui_empty>();
                     break;
@@ -979,5 +983,82 @@ namespace clib {
     bool js_ui_image::is_dynamic() const
     {
         return image->get_renderer()->is_dynamic();
+    }
+
+    // ---------------------- SVG ----------------------
+
+    js_ui_svg::js_ui_svg()
+    {
+        svg = cjsrender_svg::create();
+        change_target();
+    }
+
+    int js_ui_svg::get_type()
+    {
+        return js_ui_base::svg;
+    }
+
+    const char* js_ui_svg::get_type_str() const
+    {
+        return "svg";
+    }
+
+    void js_ui_svg::render()
+    {
+        auto bounds = CRect(left, top, left + width, top + height);
+        svg->get_renderer()->render(bounds, GLOBAL_STATE.renderTarget);
+    }
+
+    void js_ui_svg::clear()
+    {
+        svg->get_renderer()->destroy2();
+    }
+
+    void js_ui_svg::change_target()
+    {
+        svg->get_renderer()->on_changed();
+    }
+
+    void js_ui_svg::add(const std::string& s, const js_value::ref& obj)
+    {
+        if (s == "text") {
+            if (obj->get_type() == r_string)
+                svg->set_text(JS_STR(obj));
+            else
+                return;
+        }
+        else if (s == "background") {
+            if (obj->get_type() == r_string)
+                svg->set_background(CColor::Parse(CStringA(JS_STR(obj).c_str())));
+            else
+                return;
+        }
+        else
+            return;
+        cjsgui::singleton().trigger_render();
+    }
+
+    void js_ui_svg::remove(const std::string& s)
+    {
+        if (s == "text") {
+            svg->set_text("");
+        }
+        else if (s == "background") {
+            svg->set_background(CColor(255, 255, 255));
+        }
+        else
+            return;
+        cjsgui::singleton().trigger_render();
+    }
+
+    bool js_ui_svg::hit(int x, int y) const
+    {
+        auto bounds = CRect(left, top, left + width, top + height);
+        return bounds.PtInRect(CPoint(x, y));
+    }
+
+    bool js_ui_svg::is_dynamic() const
+    {
+        return false;
     }
 }

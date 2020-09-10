@@ -17,6 +17,7 @@
 #include <restclient-cpp\connection.h>
 
 #define ROOT_DIR "script/js/"
+#define RES_DIR "script/res/"
 
 #define JS_BOOL(op) (std::dynamic_pointer_cast<jsv_boolean>(op)->b)
 #define JS_NUM(op) (std::dynamic_pointer_cast<jsv_number>(op)->number)
@@ -98,6 +99,7 @@ namespace clib {
             API_buffer_toString,
             API_UI_new,
             API_UI_render,
+            API_fs,
         };
         virtual int call_api(int, std::weak_ptr<js_value> &,
                              std::vector<std::weak_ptr<js_value>> &, uint32_t) = 0;
@@ -250,6 +252,7 @@ namespace clib {
             label,
             qr,
             image,
+            svg,
         };
         virtual int get_type() = 0;
         virtual const char* get_type_str() const = 0;
@@ -370,6 +373,24 @@ namespace clib {
         bool is_dynamic() const override;
     private:
         cjsrender_image::ref image;
+    };
+
+    class js_ui_svg : public js_ui_base {
+    public:
+        using ref = std::shared_ptr<js_ui_svg>;
+        using weak_ref = std::weak_ptr<js_ui_svg>;
+        js_ui_svg();
+        int get_type() override;
+        const char* get_type_str() const override;
+        void render() override;
+        void clear() override;
+        void change_target() override;
+        void add(const std::string&, const js_value::ref&) override;
+        void remove(const std::string&) override;
+        bool hit(int, int) const override;
+        bool is_dynamic() const override;
+    private:
+        cjsrender_svg::ref svg;
     };
 
     class jsv_ui : public jsv_object {
@@ -735,6 +756,7 @@ namespace clib {
             jsv_function::ref sys_get_config;
             jsv_function::ref sys_math;
             jsv_function::ref sys_helper;
+            jsv_function::ref sys_fs;
             // function
             jsv_function::ref f_number;
             jsv_function::ref f_boolean;

@@ -61,5 +61,15 @@
                 UI.root.push(image);
             }
         }
-    })
+    });
+    var svg = new UI({
+        type: 'svg',
+        background: 'rgb(255,255,255)',
+        left: 120,
+        top: 90,
+        width: 100,
+        height: 100,
+        text: FS.readFileSync('nanosvg.txt').toString()
+    });
+    UI.root.push(svg);
 })();

@@ -549,6 +549,13 @@ namespace clib {
             return js.call_api(API_helper, _this, args, 0);
         };
         permanents.sys->add(permanents.sys_helper->name, permanents.sys_helper);
+        permanents.sys_fs = _new_function(nullptr, js_value::at_const | js_value::at_readonly);
+        permanents.sys_fs->add("length", _int_1);
+        permanents.sys_fs->name = "fs";
+        permanents.sys_fs->builtin = [](auto& func, auto& _this, auto& args, auto& js, auto attr) {
+            return js.call_api(API_fs, _this, args, 0);
+        };
+        permanents.sys->add(permanents.sys_fs->name, permanents.sys_fs);
         permanents.global_env->add("sys", permanents.sys);
         // number
         permanents.f_number = _new_function(permanents._proto_number, js_value::at_const | js_value::at_readonly);
@@ -1550,6 +1557,56 @@ return js.call_api(API_UI_new, _this, args, 0);
             push(new_number(n));
         }
                        break;
+        case API_fs: {
+            if (args.empty()) {
+                push(new_undefined());
+                break;
+            }
+            auto obj = args.front().lock();
+            if (obj->is_primitive()) {
+                push(new_string("need object"));
+                break;
+            }
+            auto o = JS_O(obj);
+            auto r = 0;
+            auto v = o->get("method", this);
+            if (v) {
+                if (v->get_type() != r_string) {
+                    push(new_string("method should be string type"));
+                    break;
+                }
+                auto method = JS_STR(v);
+                if (method == "readFileSync") {
+                    auto v = o->get("filename", this);
+                    if (v && v->get_type() == r_string) {
+                        auto fn = JS_STR(v);
+                        std::ifstream ifs(RES_DIR + fn, std::ios::binary);
+                        if (!ifs) {
+                            push(new_string("invalid filename"));
+                            break;
+                        }
+                        auto p = ifs.rdbuf();
+                        auto size = p->pubseekoff(0, std::ios::end, std::ios::in);
+                        p->pubseekpos(0, std::ios::in);
+                        std::vector<char> data;
+                        data.resize((size_t)size);
+                        p->sgetn((char*)data.data(), size);
+                        auto buf = new_buffer();
+                        buf->set_buffer(*this, data);
+                        push(buf);
+                        break;
+                    }
+                    else {
+                        push(new_string("need filename"));
+                        break;
+                    }
+                }
+                push(new_string("invalid fs method"));
+                break;
+            }
+            push(new_string("invalid fs call"));
+        }
+                     break;
         default:
             break;
         }

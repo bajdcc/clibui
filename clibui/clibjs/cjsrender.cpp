@@ -8,6 +8,8 @@
 #include "cjsgui.h"
 #include <render\Direct2D.h>
 #include <libqrencode\qrencode.h>
+#include <nanosvg\nanosvg.h>
+#include <nanosvg\nanosvgrast.h>
 
 namespace clib {
 
@@ -18,6 +20,7 @@ namespace clib {
         cjsrender_label_renderer::register_element();
         cjsrender_qr_renderer::register_element();
         cjsrender_image_renderer::register_element();
+        cjsrender_svg_renderer::register_element();
     }
 
     bool cjsrender::register_element_factory(cjsrender_element_factory::ref factory)
@@ -677,5 +680,113 @@ namespace clib {
     }
 
 #pragma endregion qr
+
+#pragma region svg
+
+    cjsrender_svg::~cjsrender_svg()
+    {
+        renderer->destroy2();
+    }
+
+    std::string cjsrender_svg::get_name()
+    {
+        return "svg";
+    }
+
+    int cjsrender_svg::get_type()
+    {
+        return r_svg;
+    }
+
+    std::string cjsrender_svg::get_text() const
+    {
+        return text;
+    }
+
+    void cjsrender_svg::set_text(const std::string& value)
+    {
+        if (text != value)
+        {
+            text = value;
+            if (renderer)
+            {
+                renderer->destroy2();
+                if (!text.empty())
+                    renderer->on_changed();
+            }
+        }
+    }
+
+    CColor cjsrender_svg::get_background() const
+    {
+        return background;
+    }
+
+    void cjsrender_svg::set_background(CColor value)
+    {
+        if (background != value)
+        {
+            background = value;
+            if (renderer)
+            {
+                renderer->on_changed();
+            }
+        }
+    }
+
+    void cjsrender_svg_renderer::render(CRect bounds, CComPtr<ID2D1RenderTarget> r)
+    {
+        auto e = element.lock();
+        if (!bitmap && !e->get_text().empty()) {
+            init2();
+        }
+        if (bitmap) {
+            r->DrawBitmap(
+                bitmap,
+                D2D1::RectF((FLOAT)bounds.left, (FLOAT)bounds.top, (FLOAT)bounds.right, (FLOAT)bounds.bottom),
+                1.0f,
+                D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR
+            );
+        }
+    }
+
+    void cjsrender_svg_renderer::init2()
+    {
+        if (!bitmap && GLOBAL_STATE.canvas.lock()) {
+            bitmap = nullptr;
+            auto e = element.lock();
+            auto rt = GLOBAL_STATE.canvas.lock();
+            auto text = e->get_text();
+            if (text.empty())return;
+            auto background = e->get_background();
+            auto rast = nsvgCreateRasterizer();
+            auto image = nsvgParse((char*)text.c_str(), "px", 96);
+            if (image) {
+                const auto w = (int)image->width;
+                const auto h = (int)image->height;
+                auto WICBitmap = rt->CreateBitmap(w, h);
+                bitmap = rt->GetBitmapFromWIC(WICBitmap);
+                std::vector<BYTE> vec(w * h * 4);
+                nsvgRasterize(rast, image, 0, 0, 1, vec.data(), w, h, w * 4);
+                auto d2dRect = D2D1::RectU(0, 0, w, h);
+                for (auto i = 0; i < w * h; i++) {
+                    auto& d = *(DWORD*)(vec.data() + i * 4);
+                    if (d == 0)
+                        d = background.value;
+                }
+                bitmap->CopyFromMemory(&d2dRect, vec.data(), w * 4);
+                vec.clear();
+                nsvgDelete(image);
+            }
+            nsvgDeleteRasterizer(rast);
+        }
+    }
+
+    void cjsrender_svg_renderer::destroy2()
+    {
+        bitmap = nullptr;
+    }
+
+#pragma endregion svg
 }
 

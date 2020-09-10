@@ -452,6 +452,25 @@ namespace clib {
         }
         auto rt = global_state.canvas.lock()->GetDirect2DRenderTarget();
         if (global_state.canvas.lock() && !global_state.bound.IsRectEmpty()) {
+            if (global_state.renderTargetConsole) {
+                if (global_state.paintingConsole) {
+                    global_state.paintingConsole = false;
+                    global_state.renderTargetConsole->BeginDraw();
+                    global_state.renderTargetConsole->Clear(D2D1::ColorF(D2D1::ColorF::White, 0));
+                    draw_text(global_state.renderTargetConsole, bounds, brushes, false);
+                    global_state.renderTargetConsole->EndDraw();
+                    global_state.bitmapConsole = nullptr;
+                    global_state.renderTarget_bitmapConsole->GetBitmap(&global_state.bitmapConsole);
+                }
+            }
+            if (global_state.bitmapConsole) {
+                rt->DrawBitmap(
+                    global_state.bitmapConsole,
+                    D2D1::RectF((FLOAT)bounds.left, (FLOAT)bounds.top, (FLOAT)bounds.right, (FLOAT)bounds.bottom),
+                    1.0f,
+                    D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
+                );
+            }
             if (global_state.renderTarget) {
                 if (global_state.painting) {
                     global_state.dynamics.clear();
@@ -491,25 +510,6 @@ namespace clib {
             if (global_state.bitmap) {
                 rt->DrawBitmap(
                     global_state.bitmap,
-                    D2D1::RectF((FLOAT)bounds.left, (FLOAT)bounds.top, (FLOAT)bounds.right, (FLOAT)bounds.bottom),
-                    1.0f,
-                    D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
-                );
-            }
-            if (global_state.renderTargetConsole) {
-                if (global_state.paintingConsole) {
-                    global_state.paintingConsole = false;
-                    global_state.renderTargetConsole->BeginDraw();
-                    global_state.renderTargetConsole->Clear(D2D1::ColorF(D2D1::ColorF::White, 0));
-                    draw_text(global_state.renderTargetConsole, bounds, brushes, false);
-                    global_state.renderTargetConsole->EndDraw();
-                    global_state.bitmapConsole = nullptr;
-                    global_state.renderTarget_bitmapConsole->GetBitmap(&global_state.bitmapConsole);
-                }
-            }
-            if (global_state.bitmapConsole) {
-                rt->DrawBitmap(
-                    global_state.bitmapConsole,
                     D2D1::RectF((FLOAT)bounds.left, (FLOAT)bounds.top, (FLOAT)bounds.right, (FLOAT)bounds.bottom),
                     1.0f,
                     D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
