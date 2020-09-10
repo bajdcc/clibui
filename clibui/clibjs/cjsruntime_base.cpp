@@ -1514,7 +1514,7 @@ return js.call_api(API_UI_new, _this, args, 0);
         case API_UI_render: {
             auto o = _this.lock();
             do {
-                if (!o || o->is_primitive() || args.empty()) {
+                if (!o || o->is_primitive() || args.size() < 2) {
                     break;
                 }
                 auto obj = JS_O(o);
@@ -1524,6 +1524,10 @@ return js.call_api(API_UI_new, _this, args, 0);
                 auto n = args.front().lock()->to_number(this, &r);
                 if (r != 0)
                     return r;
+                auto l = args[1].lock()->to_number(this, &r);
+                if (r != 0)
+                    return r;
+                GLOBAL_STATE.render_queue_level.push_back((int)l);
                 auto ui = JS_UI(obj);
                 if (n == 1.0f)
                     GLOBAL_STATE.render_queue_auto.push_back(ui);

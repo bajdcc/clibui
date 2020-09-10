@@ -1,13 +1,13 @@
-UI.prototype.render = function(n) {
+UI.prototype.render = function(n, l) {
     if (n === 1)
-        this.render_internal(n);
+        this.render_internal(n, l);
     this.forEach(x => {
         if (x && x instanceof UI) {
-            x.render(n);
+            x.render(n, l + 1);
         }
     });
     if (n === 2)
-        this.render_internal(n);
+        this.render_internal(n, l);
 };
 UI.prototype.resize = function() {
     if (this.event && this.event.has('resize')) {
@@ -114,8 +114,8 @@ sys.send_signal = (function() {
     const map_signal = {
         render: function() {
             if (UI.root && UI.root instanceof UI) {
-                UI.root.render(1);
-                UI.root.render(2);
+                UI.root.render(1, 0);
+                UI.root.render(2, 0);
             }
         },
         resize: function() {

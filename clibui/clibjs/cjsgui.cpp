@@ -75,6 +75,7 @@ namespace clib {
         global_state.drawing = false;
         global_state.render_queue.clear();
         global_state.render_queue_auto.clear();
+        global_state.render_queue_level.clear();
         global_state.render_queue_bk.clear();
         global_state.render_queue_auto_bk.clear();
         global_state.ui_focus.reset();
@@ -95,6 +96,7 @@ namespace clib {
     {
         global_state.drawing = false;
         global_state.painting = false;
+        global_state.render_queue_level.clear();
         return global_state.renderTarget;
     }
 
@@ -1318,10 +1320,13 @@ namespace clib {
                 s.Append(L"\n");
             }
             s.Append(L"UI:\n");
-            for (size_t i = 0; i < global_state.render_queue.size(); i++) {
-                s.AppendFormat(L"%d |", i);
+            for (size_t i = 1; i < global_state.render_queue.size(); i++) {
+                s.AppendFormat(L"%2d |", i);
                 const auto k = global_state.render_queue[i].lock();
                 auto _e = k->get_element();
+                for (auto j = 1; j < global_state.render_queue_level[i]; j++) {
+                    s.Append(L"  ");
+                }
                 if (_e.lock()) {
                     auto e = _e.lock();
                     s.AppendFormat(L" %S (%d,%d,%dx%d)", e->get_type_str(), e->left, e->top, e->width, e->height);

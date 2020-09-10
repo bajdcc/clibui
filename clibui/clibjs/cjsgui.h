@@ -178,6 +178,7 @@ namespace clib {
             bool paintingScroll{ false };
             std::vector<jsv_ui::weak_ref> render_queue;
             std::vector<jsv_ui::weak_ref> render_queue_auto;
+            std::vector<int> render_queue_level;
             std::vector<jsv_ui::weak_ref> render_queue_bk;
             std::vector<jsv_ui::weak_ref> render_queue_auto_bk;
             jsv_ui::weak_ref ui_focus;
