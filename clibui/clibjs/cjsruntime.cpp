@@ -427,6 +427,7 @@ namespace clib {
         s->func = func;
         s->args = std::move(args);
         s->attr = attr;
+        s->path = paths.back();
         timeout.queues[t]->push_back(s);
         timeout.ids.insert({ s->id, s });
         return (double)s->id;
@@ -491,7 +492,7 @@ namespace clib {
                 current_stack->envs = permanents.global_env;
                 current_stack->_this = permanents.global_env;
                 current_stack->trys.push_back(std::make_shared<sym_try_t>(sym_try_t{}));
-                paths.emplace_back(ROOT_DIR);
+                paths.emplace_back(callback->path);
                 js_value::weak_ref env = stack.front()->envs;
                 CString s;
                 s.Format(L"Timeout：%S", current_stack->exec.c_str());

@@ -802,6 +802,7 @@ namespace clib {
             std::chrono::milliseconds::rep span{ 0 };
             uint32_t id{ 0 };
             jsv_function::ref func;
+            std::string path;
             std::vector<js_value::weak_ref> args;
             uint32_t attr{ 0 };
         };

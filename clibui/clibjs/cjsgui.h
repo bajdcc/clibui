@@ -43,6 +43,7 @@
 #define GUI_INPUT_CARET 15
 #define GUI_SPECIAL_MASK 0x20000
 #define GUI_SCREEN_N 4
+#define GUI_CACHE_OBJ_MIN 5
 
 namespace clib {
 
@@ -137,6 +138,15 @@ namespace clib {
             int input_code{ 0 };
             bool input_single{ false };
         };
+        struct cache_bitmap_t {
+            using ref = std::shared_ptr<cache_bitmap_t>;
+            CComPtr<ID2D1Bitmap> bitmap;
+            CComPtr<ID2D1RenderTarget> renderTarget;
+            CComPtr<ID2D1BitmapRenderTarget> renderTarget_bitmap;
+        };
+        struct cache_idx_t {
+            int start, end, to;
+        };
         struct global_state_t {
             global_input_t* input{ nullptr };
             global_input_t* input_s{ nullptr };
@@ -165,10 +175,8 @@ namespace clib {
             CComPtr<ID2D1Bitmap> bitmapConsole;
             CComPtr<ID2D1RenderTarget> renderTargetConsole;
             CComPtr<ID2D1BitmapRenderTarget> renderTarget_bitmapConsole;
-            std::vector<jsv_ui::weak_ref> dynamics;
-            CComPtr<ID2D1Bitmap> bitmapDynamic;
-            CComPtr<ID2D1RenderTarget> renderTargetDynamic;
-            CComPtr<ID2D1BitmapRenderTarget> renderTarget_bitmapDynamic;
+            std::vector<cache_idx_t> cached_index;
+            std::vector<cache_bitmap_t::ref> cached_bitmap;
             int total_obj{ 0 };
             int cache_obj{ 0 };
             bool drawing{ false };

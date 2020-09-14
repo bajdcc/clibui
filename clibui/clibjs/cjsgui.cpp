@@ -167,7 +167,7 @@ namespace clib {
         }
         draw_window(bounds, brushes);
     }
-    
+
     static int js_get_num_length(int x)
     {
         int len = 0;
@@ -232,7 +232,7 @@ namespace clib {
                         b->SetColor(D2D1::ColorF(87.0f / 255.0f, 116.0f / 255.0f, 48.0f / 255.0f, 0.4f));
                         rt->FillRectangle(
                             D2D1::RectF((float)x - num_k * GUI_FONT_W - 5, (float)y + GUI_FONT_H_1,
-                                (float)x, (float)y + GUI_FONT_H_2), b);
+                            (float)x, (float)y + GUI_FONT_H_2), b);
                     }
                 }
                 line_no.Format(L"%d", i);
@@ -244,7 +244,7 @@ namespace clib {
                     b->SetColor(D2D1::ColorF(43.0f / 255.0f, 145.0f / 255.0f, 175.0f / 255.0f));
                 rt->DrawText(line_no.GetBuffer(0), line_no.GetLength(), brushes.cmdTF->textFormat,
                     D2D1::RectF((float)x - num_k * GUI_FONT_W - 5, (float)y + GUI_FONT_H_1,
-                        (float)x, (float)y + GUI_FONT_H_2), b);
+                    (float)x, (float)y + GUI_FONT_H_2), b);
                 for (auto j = 0; j < cols; ++j) {
                     ascii = true;
                     c = buffer[i * cols + j];
@@ -266,7 +266,7 @@ namespace clib {
                             b->SetColor(D2D1::ColorF(colors_bg[i * cols + j]));
                             rt->FillRectangle(
                                 D2D1::RectF((float)x, (float)y + GUI_FONT_H_1,
-                                    (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
+                                (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
                         }
                         if (c > 0) {
                             if (std::isprint(buffer[i * cols + j])) {
@@ -274,20 +274,20 @@ namespace clib {
                                 s[0] = c;
                                 rt->DrawText(s, 1, brushes.cmdTF->textFormat,
                                     D2D1::RectF((float)x, (float)y + GUI_FONT_H_1,
-                                        (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
+                                    (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
                             }
                             else if (c == '\7') {
                                 b->SetColor(D2D1::ColorF(colors_fg[i * cols + j]));
                                 rt->FillRectangle(
                                     D2D1::RectF((float)x, (float)y + GUI_FONT_H_1,
-                                        (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
+                                    (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
                             }
                         }
                         else if (c < 0) {
                             b->SetColor(D2D1::ColorF(colors_fg[i * cols + j]));
                             rt->FillRectangle(
                                 D2D1::RectF((float)x, (float)y + GUI_FONT_H_1,
-                                    (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
+                                (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
                         }
                         x += GUI_FONT_W;
                     }
@@ -296,7 +296,7 @@ namespace clib {
                             b->SetColor(D2D1::ColorF(colors_bg[i * cols + j]));
                             rt->FillRectangle(
                                 D2D1::RectF((float)x, (float)y + GUI_FONT_H_1,
-                                    (float)x + GUI_FONT_W * 2, (float)y + GUI_FONT_H_2), b);
+                                (float)x + GUI_FONT_W * 2, (float)y + GUI_FONT_H_2), b);
                         }
                         sc[0] = c;
                         sc[1] = buffer[i * cols + j + 1];
@@ -306,7 +306,7 @@ namespace clib {
                         b->SetColor(D2D1::ColorF(colors_fg[i * cols + j]));
                         rt->DrawText(s, 1, brushes.gbkTF->textFormat,
                             D2D1::RectF((float)x + GUI_FONT_W_C1, (float)y + GUI_FONT_H_C1,
-                                (float)x + GUI_FONT_W_C2, (float)y + GUI_FONT_H_C2), b);
+                            (float)x + GUI_FONT_W_C2, (float)y + GUI_FONT_H_C2), b);
                         x += GUI_FONT_W * 2;
                     }
                 }
@@ -326,11 +326,11 @@ namespace clib {
                 if (ptr_y >= view && ptr_y <= view_end) {
                     auto __y = ptr_y - view;
                     int _x = max((w - width) / 2, 0) + ptr_x * GUI_FONT_W;
-                    int _y =max((h - height) / 2, 0) + __y * GUI_FONT_H;
+                    int _y = max((h - height) / 2, 0) + __y * GUI_FONT_H;
                     b->SetColor(D2D1::ColorF(color_fg_stack.back()));
                     rt->DrawText(_T("_"), 1, brushes.cmdTF->textFormat,
                         D2D1::RectF((float)bounds.left + _x, (float)bounds.top + _y + GUI_FONT_H_1,
-                            (float)bounds.left + _x + GUI_FONT_W, (float)bounds.top + _y + GUI_FONT_H_2), b);
+                        (float)bounds.left + _x + GUI_FONT_W, (float)bounds.top + _y + GUI_FONT_H_2), b);
                 }
             }
         }
@@ -406,7 +406,7 @@ namespace clib {
         }
     }
 
-    static void cubic_bezier(int n, float x1, float y1, float x2, float y2, std::vector<D2D1_POINT_2F> &out) {
+    static void cubic_bezier(int n, float x1, float y1, float x2, float y2, std::vector<D2D1_POINT_2F>& out) {
         auto p = 1.0f / n;
         for (auto i = 0; i < n; i++) {
             auto t = p * i;
@@ -472,44 +472,91 @@ namespace clib {
                     1.0f,
                     D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
                 );
+                draw_text(rt, bounds, brushes, true);
             }
             if (global_state.renderTarget) {
                 if (global_state.painting) {
-                    global_state.dynamics.clear();
+                    std::vector<bool> _dynamics;
                     global_state.painting = false;
-                    global_state.renderTarget->BeginDraw();
-                    global_state.renderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White, 0));
-                    for (const auto& s : global_state.render_queue) {
-                        auto s2 = s.lock();
-                        if (s2) {
-                            if (s2->is_dynamic()) {
-                                global_state.dynamics.push_back(s2);
+                    global_state.cached_bitmap.clear();
+                    global_state.cached_index.clear();
+                    if (!global_state.render_queue.empty()) {
+                        for (const auto& s : global_state.render_queue) {
+                            auto s2 = s.lock();
+                            if (s2 && s2->is_dynamic())
+                                _dynamics.push_back(true);
+                            else
+                                _dynamics.push_back(false);
+                        }
+                        auto size = (int)global_state.render_queue.size();
+                        for (auto i = 0; i < size;) {
+                            if (!_dynamics[i]) {
+                                auto j = 0, k = i;
+                                while (i < size && !_dynamics[i]) {
+                                    i++; j++;
+                                }
+                                if (j < GUI_CACHE_OBJ_MIN) {
+                                    for (j = k; j < i; j++)
+                                        _dynamics[j] = true;
+                                }
                             }
                             else {
-                                s2->render();
+                                i++;
                             }
                         }
-                    }
-                    global_state.renderTarget->EndDraw();
-                    global_state.bitmap = nullptr;
-                    global_state.renderTarget_bitmap->GetBitmap(&global_state.bitmap);
-                    if (global_state.dynamics.empty()) {
-                        if (global_state.renderTargetDynamic) {
-                            global_state.renderTargetDynamic = nullptr;
-                            global_state.bitmapDynamic = nullptr;
-                            global_state.renderTarget_bitmapDynamic = nullptr;
-                        }
-                    }
-                    else {
-                        if (!global_state.renderTargetDynamic) {
-                            global_state.renderTarget_bitmapDynamic = global_state.canvas.lock()->CreateBitmapRenderTarget(
-                                D2D1::SizeF((float)global_state.bound.Width(), (float)global_state.bound.Height()));
-                            global_state.renderTargetDynamic = global_state.renderTarget_bitmapDynamic;
+                        for (auto i = 0; i < size;) {
+                            auto j = i;
+                            if (_dynamics[i]) {
+                                while (i < size && _dynamics[i]) {
+                                    i++;
+                                }
+                                global_state.cached_index.push_back({ j,i,-1 });
+                            }
+                            else {
+                                while (i < size && !_dynamics[i]) {
+                                    i++;
+                                }
+                                global_state.cached_index.push_back({ j,i,(int)global_state.cached_bitmap.size() });
+                                auto c = std::make_shared<cache_bitmap_t>();
+                                global_state.cached_bitmap.push_back(c);
+                                c->renderTarget_bitmap = global_state.canvas.lock()->CreateBitmapRenderTarget(
+                                    D2D1::SizeF((float)global_state.bound.Width(), (float)global_state.bound.Height()));
+                                c->renderTarget = c->renderTarget_bitmap;
+                                global_state.renderTarget = c->renderTarget;
+                                c->renderTarget->BeginDraw();
+                                c->renderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White, 0));
+                                for (auto k = j; k < i; k++) {
+                                    global_state.render_queue[k].lock()->render();
+                                }
+                                c->renderTarget->EndDraw();
+                                c->renderTarget_bitmap->GetBitmap(&c->bitmap);
+                                global_state.renderTarget = global_state.renderTarget_bitmap;
+                            }
                         }
                     }
                 }
             }
-            if (global_state.bitmap) {
+            if (!global_state.cached_index.empty()) {
+                global_state.renderTarget->BeginDraw();
+                global_state.renderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White, 0));
+                for (const auto& s : global_state.cached_index) {
+                    if (s.to == -1) {
+                        for (auto i = s.start; i < s.end; i++) {
+                            global_state.render_queue[i].lock()->render();
+                        }
+                    }
+                    else {
+                        global_state.renderTarget->DrawBitmap(
+                            global_state.cached_bitmap[s.to]->bitmap,
+                            D2D1::RectF((FLOAT)bounds.left, (FLOAT)bounds.top, (FLOAT)bounds.right, (FLOAT)bounds.bottom),
+                            1.0f,
+                            D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
+                        );
+                    }
+                }
+                global_state.renderTarget->EndDraw();
+                global_state.bitmap = nullptr;
+                global_state.renderTarget_bitmap->GetBitmap(&global_state.bitmap);
                 rt->DrawBitmap(
                     global_state.bitmap,
                     D2D1::RectF((FLOAT)bounds.left, (FLOAT)bounds.top, (FLOAT)bounds.right, (FLOAT)bounds.bottom),
@@ -517,28 +564,6 @@ namespace clib {
                     D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
                 );
             }
-            if (global_state.renderTargetDynamic) {
-                global_state.renderTargetDynamic->BeginDraw();
-                global_state.renderTargetDynamic->Clear(D2D1::ColorF(D2D1::ColorF::White, 0));
-                global_state.renderTarget = global_state.renderTargetDynamic;
-                for (auto& s : global_state.dynamics) {
-                    if (s.lock())
-                        s.lock()->render();
-                }
-                global_state.renderTargetDynamic->EndDraw();
-                global_state.bitmapDynamic = nullptr;
-                global_state.renderTarget_bitmapDynamic->GetBitmap(&global_state.bitmapDynamic);
-                global_state.renderTarget = global_state.renderTarget_bitmap;
-            }
-            if (global_state.bitmapDynamic) {
-                rt->DrawBitmap(
-                    global_state.bitmapDynamic,
-                    D2D1::RectF((FLOAT)bounds.left, (FLOAT)bounds.top, (FLOAT)bounds.right, (FLOAT)bounds.bottom),
-                    1.0f,
-                    D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
-                );
-            }
-            draw_text(rt, bounds, brushes, true);
         }
     }
 
@@ -584,7 +609,7 @@ namespace clib {
                     vm.reset();
                 }
             }
-            catch (const cjs_exception& e) {
+            catch (const cjs_exception & e) {
                 ATLTRACE("[SYSTEM] ERR  | RUNTIME ERROR: %s\n", e.message().c_str());
 #if REPORT_ERROR
                 {
@@ -1288,11 +1313,8 @@ namespace clib {
 
     void cjsgui::resize_ui()
     {
-        if (global_state.renderTargetDynamic) {
-            global_state.bitmapDynamic = nullptr;
-            global_state.renderTargetDynamic = nullptr;
-            global_state.renderTarget_bitmapDynamic = nullptr;
-        }
+        global_state.cached_index.clear();
+        global_state.cached_bitmap.clear();
     }
 
     CString cjsgui::get_disp(types::disp_t t) const
@@ -1320,8 +1342,13 @@ namespace clib {
                 s.Append(L"\n");
             }
             s.Append(L"UI:\n");
+            std::vector<int> cached(global_state.render_queue.size());
+            for (const auto& s : global_state.cached_index) {
+                for (auto i = s.start; i < s.end; i++)
+                    cached[i] = s.to;
+            }
             for (size_t i = 1; i < global_state.render_queue.size(); i++) {
-                s.AppendFormat(L"%2d |", i);
+                s.AppendFormat(L"%2d | (%2d) ", i, cached[i]);
                 const auto k = global_state.render_queue[i].lock();
                 auto _e = k->get_element();
                 for (auto j = 1; j < global_state.render_queue_level[i]; j++) {
@@ -1338,7 +1365,7 @@ namespace clib {
             }
             return s;
         }
-            break;
+                     break;
         case D_WINDOW:
             break;
         case D_MEM:
@@ -1911,7 +1938,7 @@ namespace clib {
                         ptr_x = min(ptr_x, valid[ptr_y]);
                         view = min(view, ptr_y);
                     }
-                    else if (cols* ptr_my + ptr_mx <= cols * (ptr_y - 1) + cols - 1) {
+                    else if (cols * ptr_my + ptr_mx <= cols * (ptr_y - 1) + cols - 1) {
                         ptr_y--;
                         ptr_x = ptr_mx;
                         view = max(view, ptr_y);
@@ -1919,7 +1946,7 @@ namespace clib {
                     return;
                 }
             }
-                break;
+            break;
             case VK_RIGHT:
                 // C = (char) -13;
                 // break;
@@ -1956,7 +1983,7 @@ namespace clib {
                     return;
                 }
             }
-                break;
+            break;
             case VK_HOME:
             {
                 if (!input_state || js_key_pressing(VK_CONTROL)) {
@@ -1976,7 +2003,7 @@ namespace clib {
                     }
                 }
             }
-                return;
+            return;
             case VK_END:
             {
                 if (!input_state || js_key_pressing(VK_CONTROL)) {
@@ -1998,7 +2025,7 @@ namespace clib {
                     }
                 }
             }
-                return;
+            return;
             case VK_DELETE: {
                 if (input_state &&
                     (ptr_x != line || ptr_y != cols - 1) &&
@@ -2027,7 +2054,7 @@ namespace clib {
                     put_char('\b');
                 }
             }
-                return;
+                          return;
             case VK_ESCAPE:
                 return;
             case VK_SPACE:
@@ -2059,12 +2086,12 @@ namespace clib {
                     input('\n');
                     return;
                 }
-            /*case 0x71: // SHIFT
-                return;
-            case 0x72: // CTRL
-                return;
-            case 0x74: // ALT
-                return;*/
+                /*case 0x71: // SHIFT
+                    return;
+                case 0x72: // CTRL
+                    return;
+                case 0x74: // ALT
+                    return;*/
             case VK_SHIFT: // SHIFT
                 return;
             case VK_CONTROL: // CTRL
@@ -2235,11 +2262,11 @@ namespace clib {
         case 'B': { // 设置背景色
             color_bg = (uint32_t)std::stoul(s.substr(1), nullptr, 16);
         }
-                  break;
+                break;
         case 'F': { // 设置前景色
             color_fg = (uint32_t)std::stoul(s.substr(1), nullptr, 16);
         }
-                  break;
+                break;
         case 'S': { // 设置
             static int cfg;
             cfg = (uint32_t)std::stoul(s.substr(1), nullptr, 10);
@@ -2262,7 +2289,7 @@ namespace clib {
                 break;
             }
         }
-                  break;
+                break;
         default:
             break;
         }
