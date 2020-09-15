@@ -876,6 +876,8 @@ return js.call_api(API_UI_new, _this, args, 0);
         tools.http_method_map["DELETE"] = M_DELETE;
         tools.http_method_map["HEAD"] = M_HEAD;
         tools.http_method_map["OPTIONS"] = M_OPTIONS;
+        // gc
+        reuse.has_gc = false;
     }
 
     void cjsruntime::destroy() {

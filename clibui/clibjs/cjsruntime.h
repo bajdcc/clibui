@@ -565,6 +565,7 @@ namespace clib {
     };
 
     struct cjs_runtime_reuse {
+        bool has_gc;
         std::vector<jsv_number::ref> reuse_numbers;
         std::vector<jsv_string::ref> reuse_strings;
         std::vector<jsv_boolean::ref> reuse_booleans;

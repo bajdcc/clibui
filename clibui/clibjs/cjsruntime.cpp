@@ -1532,8 +1532,11 @@ namespace clib {
     }
 
     js_value::ref cjsruntime::register_value(const js_value::ref& value) {
-        if (value)
+        if (value) {
+            if (reuse.has_gc)
+                reuse.has_gc = false;
             objs.push_back(value);
+        }
         return value;
     }
 
@@ -2284,6 +2287,9 @@ namespace clib {
     }
 
     void cjsruntime::gc() {
+        if (reuse.has_gc)
+            return;
+        reuse.has_gc = true;
         permanents.global_env->mark(0);
         std::for_each(objs.begin(), objs.end(), [](auto& x) { x->mark(0); });
         for (const auto& s : stack) {
