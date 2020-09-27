@@ -285,7 +285,7 @@ namespace clib {
             if (!current_stack->exec.empty()) {
                 if (current_stack->info->stat) {
                     CString s;
-                    s.Format(L"退出：%S", current_stack->exec.c_str());
+                    s.Format(L"Exit: %S", current_stack->exec.c_str());
                     cjsgui::singleton().add_stat(s);
                 }
                 paths.pop_back();
@@ -495,7 +495,7 @@ namespace clib {
                 paths.emplace_back(callback->path);
                 js_value::weak_ref env = stack.front()->envs;
                 CString s;
-                s.Format(L"Timeout：%S", current_stack->exec.c_str());
+                s.Format(L"Timeout: %S", current_stack->exec.c_str());
                 cjsgui::singleton().add_stat(s);
                 call_api(callback->func, env, callback->args, callback->attr | jsv_function::at_fast);
                 current_stack = stack.back();
@@ -1816,7 +1816,7 @@ namespace clib {
             if (f != caches.end()) {
                 if (is_stat) {
                     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - last);
-                    stat.Format(L"快速加载：%S，耗时：%lldms", filename.c_str(), duration.count());
+                    stat.Format(L"Fast load: %S, time: %lldms", filename.c_str(), duration.count());
                     cjsgui::singleton().add_stat(stat);
                 }
                 caches.insert({ filename, code });
@@ -1871,7 +1871,7 @@ namespace clib {
             g = nullptr;
         }
         catch (const clib::cjs_exception& e) {
-            stat.Format(L"编译：%S，失败", filename.c_str());
+            stat.Format(L"Compile %S failed", filename.c_str());
             cjsgui::singleton().add_stat(stat);
             std::stringstream ss;
             ss << "throw new SyntaxError('" << jsv_string::convert(e.message()) << "')";
@@ -1879,7 +1879,7 @@ namespace clib {
         }
         if (is_stat) {
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - last);
-            stat.Format(L"编译：%S，耗时：%lldms", filename.c_str(), duration.count());
+            stat.Format(L"Compile %S cost %lldms", filename.c_str(), duration.count());
             cjsgui::singleton().add_stat(stat);
         }
         return eval(std::move(code), filename, arg);
@@ -2162,7 +2162,7 @@ namespace clib {
         }
         auto end = std::chrono::system_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-        stat.Format(L"加载缓存：%S，耗时：%lldms", filename.c_str(), duration);
+        stat.Format(L"Load cache: %S cost %lldms", filename.c_str(), duration);
         cjsgui::singleton().add_stat(stat);
         return result;
     }

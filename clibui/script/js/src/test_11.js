@@ -107,5 +107,6 @@
         });
         Promise.all([load_info, load_lyric, load_mp3, play_music, play_lyric]);
     }
-    play('529823971');
+    //play('529823971');
+    play('1425371292');
 })();

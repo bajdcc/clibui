@@ -23,7 +23,7 @@
 #define REPORT_STAT 1
 #define REPORT_STAT_FILE "js_stat.log"
 #define STAT_DELAY_N 50
-#define STAT_MAX_N 10
+#define STAT_MAX_N 500
 
 #define AST_FILE "js_ast.log"
 
@@ -1200,7 +1200,7 @@ namespace clib {
         screen_ptr = -1;
         if (vm) {
             CString s;
-            s.Format(L"初始化屏幕（%d）", n);
+            s.Format(L"Init screen: #%d", n);
             add_stat(s);
         }
         return true;
@@ -1247,7 +1247,7 @@ namespace clib {
             screens[n].reset(nullptr);
             if (vm) {
                 CString s;
-                s.Format(L"关闭屏幕（%d）", n);
+                s.Format(L"Close screen: #%d", n);
                 add_stat(s);
             }
         }
@@ -1370,23 +1370,8 @@ namespace clib {
             break;
         case D_MEM:
             break;
-        case D_STAT: {
-            auto& stat = *const_cast<std::list<std::tuple<CString, int>>*>(&stat_s);
-            if (!stat_s.empty()) {
-                ss << (wchar_t)(L'0' + stat_s.size());
-                for (auto i = stat.begin(); i != stat.end();) {
-                    ss << std::get<0>(*i).GetBuffer(0) << std::endl;
-                    if (std::get<1>(*i) <= 1) {
-                        i = stat.erase(i);
-                    }
-                    else {
-                        std::get<1>(*i) = std::get<1>(*i) - 1;
-                        i++;
-                    }
-                }
-            }
-        }
-                   break;
+        case D_STAT:
+            break;
         default:
             break;
         }
@@ -1396,9 +1381,9 @@ namespace clib {
     void cjsgui::add_stat(const CString& s, bool show)
     {
         if (show) {
-            if (stat_s.size() >= STAT_MAX_N)
-                stat_s.pop_front();
-            stat_s.push_back({ s, STAT_DELAY_N });
+            if (global_state.stat_s.size() >= STAT_MAX_N)
+                global_state.stat_s.pop_front();
+            global_state.stat_s.push_back(CStringA(s));
         }
 #if REPORT_STAT
         {
@@ -1826,21 +1811,21 @@ namespace clib {
             if (c & GUI_SPECIAL_MASK) {
                 auto cc = c & 0xffff;
                 cc = min(cc, 255);
-                str.Format(L"屏幕（%d）键盘输入：%d 0x%x %s", screen_ptr, cc, cc, mapVirtKey[cc]);
+                str.Format(L"Screen #%d Input: %d 0x%x %s", screen_ptr, cc, cc, mapVirtKey[cc]);
                 if (c & GUI_SPECIAL_MASK) {
                     auto cc = (c & 0xff) - VK_F1;
                     if (cc >= 0 && cc < (int)screens.size()) {
                         if (switch_screen_display(cc)) {
-                            str.AppendFormat(L"，切换到屏幕（%d）成功", cc);
+                            str.AppendFormat(L", switch to #%d", cc);
                         }
                         else {
-                            str.AppendFormat(L"，切换到屏幕（%d）失败", cc);
+                            str.AppendFormat(L", switch to #%d failed", cc);
                         }
                     }
                 }
             }
             else
-                str.Format(L"屏幕（%d）键盘输入：%d 0x%x %c", screen_ptr, c, c, isprint(c) ? wchar_t(c) : L'?');
+                str.Format(L"Screen #%d Input: %d 0x%x %c", screen_ptr, c, c, isprint(c) ? wchar_t(c) : L'?');
             add_stat(str);
         }
         if (!input_state) {

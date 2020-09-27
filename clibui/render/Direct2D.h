@@ -25,11 +25,13 @@ public:
     CComPtr<IDXGIDevice1> GetDXGIDevice();
     CComPtr<ID3D11Device> GetDirect3DDevice();
     CComPtr<ID3D11DeviceContext> GetDirect3DDeviceContext();
+    CComPtr<ID3D11RenderTargetView> GetDirect3DRenderTargetView();
     CComPtr<IDXGISwapChain> GetDXGISwapChain();
 
     static Direct2D& Singleton();
     void Init();
     void Resize();
+    HRESULT Present();
 
 private:
     CComPtr<ID2D1Factory1> D2D1Factory;
@@ -40,6 +42,7 @@ private:
     CComPtr<IDXGIDevice1> DXGIDevice;
     CComPtr<ID3D11Device> D3D11Device;
     CComPtr<ID3D11DeviceContext> D3D11DeviceContext;
+    CComPtr<ID3D11RenderTargetView> D3D11RenderTargetView;
     CComPtr<IDXGISwapChain> DXGISwapChain;
     CComPtr<ID2D1Bitmap1> D2D1RenderTarget;
     D3D_FEATURE_LEVEL FeatureLevel;

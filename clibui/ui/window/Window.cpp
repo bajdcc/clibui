@@ -4,6 +4,8 @@
 #include <cassert>
 #include <render\Direct2D.h>
 #include <clibjs\cjsgui.h>
+#include <imgui\imgui_impl_win32.h>
+#include <imgui\imgui_impl_dx11.h>
 
 #define REPORT_ERROR 1
 #define REPORT_ERROR_FILE "error.log"
@@ -42,9 +44,14 @@ static CString GetLastErrorStr() // Error Notification
 
 Window* window;
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT result = 0;
+    result = ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam);
+    if (result)
+        return TRUE;
     if (window->HandleMessage(hwnd, uMsg, wParam, lParam, result))
     {
         return result;
@@ -69,6 +76,7 @@ Window::~Window()
     Destroyed();
     DestroyWindow(handle);
     RestClient::disable();
+    ImGui_ImplWin32_Shutdown();
 }
 
 void Window::Init()
@@ -958,6 +966,9 @@ void Window::Render()
 
 void Window::RenderInternal()
 {
+    if (!d2dRenderTarget)
+        return;
+
     using namespace std::chrono_literals;
     if (std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::system_clock::now() - timer) < 10ms) {

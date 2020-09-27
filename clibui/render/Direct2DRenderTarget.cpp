@@ -74,7 +74,7 @@ HRESULT Direct2DRenderTarget::StopRendering()
 
 HRESULT Direct2DRenderTarget::Present()
 {
-    return Direct2D::Singleton().GetDXGISwapChain()->Present(1, 0);
+    return Direct2D::Singleton().Present();
 }
 
 CComPtr<IDWriteRenderingParams> Direct2DRenderTarget::CreateRenderingParams(DWRITE_RENDERING_MODE renderingMode, CComPtr<IDWriteRenderingParams> defaultParams, CComPtr<IDWriteFactory> dwriteFactory)

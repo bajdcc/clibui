@@ -172,6 +172,7 @@ void JS2DEngine::Render(CComPtr<ID2D1RenderTarget> rt, CRect bounds)
         reset();
     }
 
+    /*
     CString logo(_T("clibui @bajdcc"));
 
     rt->DrawText(logo.GetBuffer(0), logo.GetLength(), logoTF->textFormat,
@@ -252,6 +253,7 @@ void JS2DEngine::Render(CComPtr<ID2D1RenderTarget> rt, CRect bounds)
         disp = clib::cjsgui::singleton().get_disp(clib::types::D_MEM);
         rt->DrawText(disp, disp.GetLength(), loggingTF->textFormat, R, logoBrush);
     }
+    */
 
     if (GLOBAL_STATE.reboot)
         reset();

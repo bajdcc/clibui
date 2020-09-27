@@ -94,6 +94,7 @@
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "winmm")
 #pragma comment(lib, "IPHLPAPI")
+#pragma comment(lib, "XINPUT9_1_0")
 
 #pragma comment(lib, "lib\\zlib")
 #pragma comment(lib, "lib\\libcurl")

@@ -16,7 +16,6 @@ public:
     LPCTSTR DebugGetMessageName(UINT message);
 
 private:
-    int m_nDisablePumpCount{ 0 };
     UINT m_nMsgLast{ 0 };
     MSG m_msg{ 0 };
     CPoint m_ptMousePos;

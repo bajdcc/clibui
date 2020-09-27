@@ -192,6 +192,7 @@ namespace clib {
             jsv_ui::weak_ref ui_focus;
             jsv_ui::weak_ref ui_hover;
             int cursor{ 0 };
+            std::list<CStringA> stat_s;
         } global_state;
         class screen_t {
         public:
@@ -241,7 +242,6 @@ namespace clib {
         bool cycle_set{ false };
         bool entered{ false };
         std::chrono::time_point<std::chrono::system_clock> last_time{ std::chrono::system_clock::now() };
-        std::list<std::tuple<CString, int>> stat_s;
         struct easy_t {
             std::vector<float> easy_in;
             std::vector<float> easy_out;

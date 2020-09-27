@@ -4,9 +4,7 @@
 
 void Msg_Init(WindowMsgLoop::MSGMAP& msgMap);
 
-WindowMsgLoop::WindowMsgLoop()
-    : m_nDisablePumpCount(0)
-    , m_nMsgLast(WM_NULL)
+WindowMsgLoop::WindowMsgLoop() : m_nMsgLast(WM_NULL)
 {
     Msg_Init(m_msgMap);
 }
@@ -15,7 +13,7 @@ static int paint_timer(HWND handle, int* flag) {
     using namespace std::chrono_literals;
     auto t = 33ms;
     while (*flag == 0) {
-        PostMessage(handle, WM_PAINT, 0, 0);
+        InvalidateRect(handle, NULL, TRUE);
         std::this_thread::sleep_for(t);
         if (!IsWindow(handle)) {
             break;
@@ -56,32 +54,21 @@ void WindowMsgLoop::Run()
 BOOL WindowMsgLoop::Event()
 {
     for (;;) {
-        if (!PeekMessage(&m_msg, NULL, NULL, NULL, PM_NOREMOVE))
+        if (!PeekMessage(&m_msg, NULL, NULL, NULL, PM_REMOVE))
             return TRUE;
+
+        if (m_msg.message == WM_QUIT)
+            return FALSE;
 
         BOOL ret = PumpMessage();
 
-        if (m_msg.message != WM_MOUSEMOVE && m_msg.message != WM_IME_NOTIFY && m_msg.message != WM_CHAR && m_msg.message != WM_TIMER && m_msg.message != WM_PAINT)
-            return ret;
+        //if (m_msg.message != WM_MOUSEMOVE && m_msg.message != WM_IME_NOTIFY && m_msg.message != WM_CHAR && m_msg.message != WM_TIMER && m_msg.message != WM_PAINT)
+        //    return ret;
     }
 }
 
 BOOL WindowMsgLoop::PumpMessage()
 {
-    if (!GetMessage(&m_msg, NULL, NULL, NULL))
-    {
-        m_nDisablePumpCount++; // application must die
-                               // Note: prevents calling message loop things in 'ExitInstance'
-                               // will never be decremented
-        return FALSE;
-    }
-
-    if (m_nDisablePumpCount != 0)
-    {
-        ATLTRACE("Error: PumpMessage called when not permitted.");
-        ATLASSERT(FALSE);
-    }
-
     // process this message
     TranslateMessage(&m_msg);
 

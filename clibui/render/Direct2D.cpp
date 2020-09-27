@@ -4,6 +4,9 @@
 #ifdef _DEBUG
 #include <DXGIDebug.h>
 #endif
+#include <imgui\imgui_impl_dx11.h>
+#include <imgui\imgui_impl_win32.h>
+#include <clibjs\cjsgui.h>
 
 D2D1::ColorF GetD2DColor(CColor color)
 {
@@ -139,6 +142,15 @@ void Direct2D::Init()
     if (FAILED(hr))
         ATLVERIFY(!"SetMaximumFrameLatency failed");
 
+    {
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        ImGui_ImplWin32_Init(window->GetWindowHandle());
+        ImGui_ImplDX11_Init(D3D11Device.p, D3D11DeviceContext.p);
+        ImGui::StyleColorsDark();
+    }
+
     Resize();
 }
 
@@ -150,6 +162,7 @@ void Direct2D::Resize()
         D2D1DeviceContext->SetTarget(nullptr);
 
         D2D1RenderTarget.Release();
+        D3D11RenderTargetView.Release();
 
         // Preserve the existing buffer count and format.
         // Automatically choose the width and height to match the client rect for HWNDs.
@@ -186,7 +199,77 @@ void Direct2D::Resize()
 
         // Now we can set the Direct2D render target.
         D2D1DeviceContext->SetTarget(D2D1RenderTarget.p);
+        dxgiBackBuffer.Release();
+
+        CComPtr<ID3D11Resource> d3dBackBuffer;
+        ID3D11Resource* d3dResource{ nullptr };
+        ID3D11RenderTargetView* d3dRenderTargetView{ nullptr };
+        hr = DXGISwapChain->GetBuffer(0, IID_PPV_ARGS(&d3dResource));
+        if (FAILED(hr))
+            ATLVERIFY(!"GetBuffer failed");
+
+        d3dBackBuffer.Attach(d3dResource);
+        hr = D3D11Device->CreateRenderTargetView(d3dBackBuffer, nullptr, &d3dRenderTargetView);
+        if (FAILED(hr))
+            ATLVERIFY(!"CreateRenderTargetView failed");
+
+        D3D11RenderTargetView.Attach(d3dRenderTargetView);
+        d3dBackBuffer.Release();
     }
+}
+
+HRESULT Direct2D::Present()
+{
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+
+    static int size_x{ 0 };
+    static int size_y{ 0 };
+
+    ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Appearing);
+    ImGui::Begin("Project");
+    ImGui::Text("clibui @bajdcc\nScreen #%d", clib::cjsgui::singleton().current_screen());
+    ImGui::End();
+
+    const float right = 180;
+    const float height = 80;
+    auto w = GLOBAL_STATE.bound.Width();
+    auto h = GLOBAL_STATE.bound.Height();
+    if (w != size_x) {
+        size_x = w;
+        ImGui::SetNextWindowPos(ImVec2((float)w - right, 0), ImGuiCond_Always);
+        ImGui::SetNextWindowSize(ImVec2(right, height), ImGuiCond_Always);
+    }
+    else {
+        ImGui::SetNextWindowPos(ImVec2((float)w - right, 0), ImGuiCond_Appearing);
+        ImGui::SetNextWindowSize(ImVec2(right, height), ImGuiCond_Appearing);
+    }
+    ImGui::Begin("Information");
+    ImGui::Text("%.2f ms (%.1f FPS)\n[GC] Alive: %d\n[GC] Cached: %d",
+        1000.0f / ImGui::GetIO().Framerate,
+        ImGui::GetIO().Framerate,
+        GLOBAL_STATE.total_obj, GLOBAL_STATE.cache_obj);
+    ImGui::End();
+
+    if (GLOBAL_STATE.is_logging) {
+        auto logo = clib::cjsgui::singleton().get_disp(clib::types::D_STAT);
+
+        ImGui::SetNextWindowPos(ImVec2(0, h * 0.5f), ImGuiCond_Appearing);
+        ImGui::Begin("Log");
+        for (const auto k : GLOBAL_STATE.stat_s) {
+            ImGui::Text(k.GetString());
+        }
+        ImGui::SetScrollHereY(1.0f);
+        ImGui::End();
+    }
+
+    ImGui::Render();
+    auto p = D3D11RenderTargetView.p;
+    Direct2D::Singleton().GetDirect3DDeviceContext()->OMSetRenderTargets(1, &p, NULL);
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+    return DXGISwapChain->Present(1, 0);
 }
 
 Direct2D::~Direct2D()
@@ -213,6 +296,8 @@ void Direct2D::ReportLiveObjects()
     hr = dxgiDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
     if (FAILED(hr))	return;
 #endif
+    ImGui_ImplDX11_Shutdown();
+    ImGui::DestroyContext();
 }
 
 CComPtr<ID2D1Factory1> Direct2D::GetDirect2DFactory()
@@ -253,6 +338,11 @@ CComPtr<ID3D11Device> Direct2D::GetDirect3DDevice()
 CComPtr<ID3D11DeviceContext> Direct2D::GetDirect3DDeviceContext()
 {
     return D3D11DeviceContext;
+}
+
+CComPtr<ID3D11RenderTargetView> Direct2D::GetDirect3DRenderTargetView()
+{
+    return D3D11RenderTargetView;
 }
 
 CComPtr<IDXGISwapChain> Direct2D::GetDXGISwapChain()
