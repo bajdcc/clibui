@@ -28,6 +28,8 @@
 #define GUI_FONT_H_2 17
 #define GUI_FONT_H_C1 -2
 #define GUI_FONT_H_C2 15
+#define GUI_SCROLL_W 20
+#define GUI_SCROLL_H 10
 #define GUI_ROWS 30
 #define GUI_COLS 84
 #define GUI_SIZE (GUI_ROWS * GUI_COLS)
@@ -126,6 +128,8 @@ namespace clib {
         void end_render();
         void change_target(std::shared_ptr<Direct2DRenderTarget> renderTarget);
 
+        HRESULT draw_d3d();
+
     private:
         std::unique_ptr<clib::cjs> vm;
         class global_input_t {
@@ -194,6 +198,7 @@ namespace clib {
             jsv_ui::weak_ref ui_hover;
             int cursor{ 0 };
             std::list<CStringA> stat_s;
+            CPoint console_mouse{ -1,-1 };
         } global_state;
         class screen_t {
         public:

@@ -341,5 +341,12 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="clibjs\cjsgui_d3d.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="hlsl\PixelShader.hlsl" />
+    <FxCompile Include="hlsl\VertexShader.hlsl" />
   </ItemGroup>
 </Project>

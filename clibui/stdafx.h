@@ -78,6 +78,7 @@
 #include <usp10.h>
 #include <gdiplus.h>
 #include <initguid.h>
+#include <d3dcompiler.h>
 
 #pragma comment(lib, "Gdiplus")
 #pragma comment(lib, "WindowsCodecs")

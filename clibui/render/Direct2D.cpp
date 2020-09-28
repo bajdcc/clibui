@@ -57,6 +57,9 @@ void Direct2D::Init()
     // This flag adds support for surfaces with a different color channel ordering than the API default.
     // You need it for compatibility with Direct2D.
     UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+#ifdef _DEBUG
+    creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
 
     // This array defines the set of DirectX hardware feature levels this app  supports.
     // The ordering is important and you should  preserve it.
@@ -257,9 +260,12 @@ HRESULT Direct2D::Present()
     }
 
     ImGui::Render();
-    auto p = D3D11RenderTargetView.p;
-    Direct2D::Singleton().GetDirect3DDeviceContext()->OMSetRenderTargets(1, &p, NULL);
+    D3D11DeviceContext->OMSetRenderTargets(1, &D3D11RenderTargetView.p, NULL);
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+    auto hr = clib::cjsgui::singleton().draw_d3d();
+    if (hr != S_OK)
+        return hr;
 
     return DXGISwapChain->Present(1, 0);
 }

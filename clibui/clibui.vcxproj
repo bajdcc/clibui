@@ -82,6 +82,7 @@
     <ClCompile Include="clibjs\cjsgen.cpp" />
     <ClCompile Include="clibjs\cjsgen_ast.cpp" />
     <ClCompile Include="clibjs\cjsgui.cpp" />
+    <ClCompile Include="clibjs\cjsgui_d3d.cpp" />
     <ClCompile Include="clibjs\cjslexer.cpp" />
     <ClCompile Include="clibjs\cjsmem.cpp" />
     <ClCompile Include="clibjs\cjsparser.cpp" />
@@ -149,6 +150,28 @@
     <ClCompile Include="ui\window\WindowClass.cpp" />
     <ClCompile Include="ui\window\WindowMsgLoop.cpp" />
     <ClCompile Include="WinMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="hlsl\PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)shader/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)shader/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)shader/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="hlsl\VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)shader/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)shader/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)shader/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -234,8 +257,10 @@
     </Link>
     <PostBuildEvent>
       <Command>md "$(TargetDir)script"
+md "$(TargetDir)shader"
 xcopy /r /y /e /d /EXCLUDE:$(ProjectDir)script\exclude.txt "$(ProjectDir)script" "$(TargetDir)script"
-xcopy /r /y /e /d "$(ProjectDir)dll" "$(TargetDir)"</Command>
+xcopy /r /y /e /d "$(ProjectDir)dll" "$(TargetDir)"
+xcopy /r /y /e /d "$(ProjectDir)shader" "$(TargetDir)shader"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -258,8 +283,10 @@ xcopy /r /y /e /d "$(ProjectDir)dll" "$(TargetDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>md "$(TargetDir)script"
+md "$(TargetDir)shader"
 xcopy /r /y /e /d /EXCLUDE:$(ProjectDir)script\exclude.txt "$(ProjectDir)script" "$(TargetDir)script"
-xcopy /r /y /e /d "$(ProjectDir)dll" "$(TargetDir)"</Command>
+xcopy /r /y /e /d "$(ProjectDir)dll" "$(TargetDir)"
+xcopy /r /y /e /d "$(ProjectDir)shader" "$(TargetDir)shader"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

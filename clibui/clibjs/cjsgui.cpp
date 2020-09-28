@@ -83,6 +83,7 @@ namespace clib {
         global_state.imgui_hover = -1;
         global_state.ui_focus.reset();
         global_state.ui_hover.reset();
+        global_state.console_mouse = CPoint(-1, -1);
         global_state.reboot = false;
         global_state.stop = false;
         ZeroMemory(&global_state.mouseInfo, sizeof(global_state.mouseInfo));
@@ -393,13 +394,13 @@ namespace clib {
             if (a > 0.0f) {
                 int _x = bounds.left + x + cols * GUI_FONT_W;
                 int _y = bounds.top + y;
-                int _x2 = _x + 20;
+                int _x2 = _x + GUI_SCROLL_W;
                 int _y2 = _y + rows * GUI_FONT_H;
                 auto r = D2D1::RectF((float)_x, (float)_y, (float)_x2, (float)_y2);
                 scroll_rect = CRect(bounds.left + x, _y, _x2, _y2);
                 b->SetColor(D2D1::ColorF(62.0f / 255.0f, 62.0f / 255.0f, 66.0f / 255.0f, a));
                 rt->FillRectangle(r, b);
-                auto h2 = rows * GUI_FONT_H - 10;
+                auto h2 = rows * GUI_FONT_H - GUI_SCROLL_H;
                 auto start_y = 1.0f * min(view, line) / line;
                 auto end_y = 1.0f * min(line, view + rows) / line;
                 r = D2D1::RectF((float)_x + 5, (float)_y + 5 + start_y * h2,
@@ -1348,7 +1349,8 @@ namespace clib {
         ImGui::Begin("Details");
         if (ImGui::CollapsingHeader("Screen")) {
             const auto& scr = *screens[screen_id].get();
-            ImGui::Text("Screen: %d\nRows: %d\nCols: %d\nView: %d\nLine: %d\nScroll: %02x", screen_id, scr.rows, scr.cols, scr.view, scr.line, scr.scroll_fade);
+            ImGui::Text("Screen: %d\nRows: %d\nCols: %d\nView: %d\nLine: %d\nScroll: %02x\nHover rows: %d\nHover cols: %d",
+                screen_id, scr.rows, scr.cols, scr.view, scr.line, scr.scroll_fade, global_state.console_mouse.y, global_state.console_mouse.x);
         }
         if (ImGui::CollapsingHeader("UI Tree")) {
             if (!global_state.render_queue.empty()) {
@@ -2222,11 +2224,12 @@ namespace clib {
     void cjsgui::hit(int n)
     {
         if (vm) {
+            auto& scr = *screens[screen_ptr].get();
+            auto& scroll_rect = scr.scroll_rect;
+            auto in_console = scroll_rect.PtInRect(global_state.mouseInfo.pt);
             if (!vm->hit(n)) {
-                if (n == WE_VerticalWheel) {
-                    auto& scr = *screens[screen_ptr].get();
-                    auto& scroll_rect = scr.scroll_rect;
-                    if (scroll_rect.PtInRect(global_state.mouseInfo.pt)) {
+                if (in_console) {
+                    if (n == WE_VerticalWheel) {
                         auto dr = global_state.mouseInfo.wheel <= 0;
                         auto dt = abs(global_state.mouseInfo.wheel) / GUI_FONT_H;
                         if (dt != 0) {
@@ -2242,6 +2245,15 @@ namespace clib {
                             }
                         }
                     }
+                }
+            }
+            if (n == WE_MouseMoving) {
+                if (in_console && global_state.mouseInfo.pt.x < scroll_rect.right - GUI_SCROLL_W) {
+                    auto dis = global_state.mouseInfo.pt - scroll_rect.TopLeft();
+                    global_state.console_mouse = CPoint(dis.cx / GUI_FONT_W, dis.cy / GUI_FONT_H);
+                }
+                else if (global_state.console_mouse.x != -1) {
+                    global_state.console_mouse = CPoint(-1, -1);
                 }
             }
         }
