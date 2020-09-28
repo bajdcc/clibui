@@ -11,6 +11,8 @@
 #include "cjsgui.h"
 #include "cjsnet.h"
 #include "ui/window/Window.h"
+#include <imgui\imgui_impl_dx11.h>
+#include <imgui\imgui_impl_win32.h>
 
 #ifdef REPORT_ERROR
 #undef REPORT_ERROR
@@ -78,6 +80,7 @@ namespace clib {
         global_state.render_queue_level.clear();
         global_state.render_queue_bk.clear();
         global_state.render_queue_auto_bk.clear();
+        global_state.imgui_hover = -1;
         global_state.ui_focus.reset();
         global_state.ui_hover.reset();
         global_state.reboot = false;
@@ -97,6 +100,7 @@ namespace clib {
         global_state.drawing = false;
         global_state.painting = false;
         global_state.render_queue_level.clear();
+        global_state.imgui_hover = -1;
         return global_state.renderTarget;
     }
 
@@ -232,7 +236,7 @@ namespace clib {
                         b->SetColor(D2D1::ColorF(87.0f / 255.0f, 116.0f / 255.0f, 48.0f / 255.0f, 0.4f));
                         rt->FillRectangle(
                             D2D1::RectF((float)x - num_k * GUI_FONT_W - 5, (float)y + GUI_FONT_H_1,
-                            (float)x, (float)y + GUI_FONT_H_2), b);
+                                (float)x, (float)y + GUI_FONT_H_2), b);
                     }
                 }
                 line_no.Format(L"%d", i);
@@ -244,7 +248,7 @@ namespace clib {
                     b->SetColor(D2D1::ColorF(43.0f / 255.0f, 145.0f / 255.0f, 175.0f / 255.0f));
                 rt->DrawText(line_no.GetBuffer(0), line_no.GetLength(), brushes.cmdTF->textFormat,
                     D2D1::RectF((float)x - num_k * GUI_FONT_W - 5, (float)y + GUI_FONT_H_1,
-                    (float)x, (float)y + GUI_FONT_H_2), b);
+                        (float)x, (float)y + GUI_FONT_H_2), b);
                 for (auto j = 0; j < cols; ++j) {
                     ascii = true;
                     c = buffer[i * cols + j];
@@ -266,7 +270,7 @@ namespace clib {
                             b->SetColor(D2D1::ColorF(colors_bg[i * cols + j]));
                             rt->FillRectangle(
                                 D2D1::RectF((float)x, (float)y + GUI_FONT_H_1,
-                                (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
+                                    (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
                         }
                         if (c > 0) {
                             if (std::isprint(buffer[i * cols + j])) {
@@ -274,20 +278,20 @@ namespace clib {
                                 s[0] = c;
                                 rt->DrawText(s, 1, brushes.cmdTF->textFormat,
                                     D2D1::RectF((float)x, (float)y + GUI_FONT_H_1,
-                                    (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
+                                        (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
                             }
                             else if (c == '\7') {
                                 b->SetColor(D2D1::ColorF(colors_fg[i * cols + j]));
                                 rt->FillRectangle(
                                     D2D1::RectF((float)x, (float)y + GUI_FONT_H_1,
-                                    (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
+                                        (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
                             }
                         }
                         else if (c < 0) {
                             b->SetColor(D2D1::ColorF(colors_fg[i * cols + j]));
                             rt->FillRectangle(
                                 D2D1::RectF((float)x, (float)y + GUI_FONT_H_1,
-                                (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
+                                    (float)x + GUI_FONT_W, (float)y + GUI_FONT_H_2), b);
                         }
                         x += GUI_FONT_W;
                     }
@@ -296,7 +300,7 @@ namespace clib {
                             b->SetColor(D2D1::ColorF(colors_bg[i * cols + j]));
                             rt->FillRectangle(
                                 D2D1::RectF((float)x, (float)y + GUI_FONT_H_1,
-                                (float)x + GUI_FONT_W * 2, (float)y + GUI_FONT_H_2), b);
+                                    (float)x + GUI_FONT_W * 2, (float)y + GUI_FONT_H_2), b);
                         }
                         sc[0] = c;
                         sc[1] = buffer[i * cols + j + 1];
@@ -306,7 +310,7 @@ namespace clib {
                         b->SetColor(D2D1::ColorF(colors_fg[i * cols + j]));
                         rt->DrawText(s, 1, brushes.gbkTF->textFormat,
                             D2D1::RectF((float)x + GUI_FONT_W_C1, (float)y + GUI_FONT_H_C1,
-                            (float)x + GUI_FONT_W_C2, (float)y + GUI_FONT_H_C2), b);
+                                (float)x + GUI_FONT_W_C2, (float)y + GUI_FONT_H_C2), b);
                         x += GUI_FONT_W * 2;
                     }
                 }
@@ -330,7 +334,7 @@ namespace clib {
                     b->SetColor(D2D1::ColorF(color_fg_stack.back()));
                     rt->DrawText(_T("_"), 1, brushes.cmdTF->textFormat,
                         D2D1::RectF((float)bounds.left + _x, (float)bounds.top + _y + GUI_FONT_H_1,
-                        (float)bounds.left + _x + GUI_FONT_W, (float)bounds.top + _y + GUI_FONT_H_2), b);
+                            (float)bounds.left + _x + GUI_FONT_W, (float)bounds.top + _y + GUI_FONT_H_2), b);
                 }
             }
         }
@@ -564,6 +568,18 @@ namespace clib {
                     D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
                 );
             }
+            if (global_state.imgui_hover != -1) {
+                assert(global_state.imgui_hover < (int)global_state.render_queue.size());
+                auto k = global_state.render_queue[global_state.imgui_hover].lock();
+                auto _e = k->get_element();
+                if (_e.lock()) {
+                    auto e = _e.lock();
+                    brushes.brush->SetColor(D2D1::ColorF(D2D1::ColorF::Orange, 0.3f));
+                    rt->FillRectangle(D2D1::RectF((float)e->left, (float)e->top, (float)(e->left + e->width), (float)(e->top + e->height)), brushes.brush);
+                    brushes.brush->SetColor(D2D1::ColorF(D2D1::ColorF::Red, 0.8f));
+                    rt->DrawRectangle(D2D1::RectF((float)e->left, (float)e->top, (float)(e->left + e->width), (float)(e->top + e->height)), brushes.brush, 2.5f);
+                }
+            }
         }
     }
 
@@ -609,7 +625,7 @@ namespace clib {
                     vm.reset();
                 }
             }
-            catch (const cjs_exception & e) {
+            catch (const cjs_exception& e) {
                 ATLTRACE("[SYSTEM] ERR  | RUNTIME ERROR: %s\n", e.message().c_str());
 #if REPORT_ERROR
                 {
@@ -1317,65 +1333,127 @@ namespace clib {
         global_state.cached_bitmap.clear();
     }
 
-    CString cjsgui::get_disp(types::disp_t t) const
+    void cjsgui::render_log()
     {
-        static TCHAR sz[256];
-        std::wstringstream ss;
-        switch (t) {
-        case D_PS:
-            break;
-        case D_HTOP:
-            break;
-        case D_HANDLE: {
-            CString s;
+        auto h = global_state.bound.Height();
+        ImGui::SetNextWindowPos(ImVec2(0, h * 0.5f), ImGuiCond_Appearing);
+        ImGui::Begin("Log");
+        for (const auto k : GLOBAL_STATE.stat_s) {
+            ImGui::Text(k.GetString());
+        }
+        ImGui::SetScrollHereY(1.0f);
+        ImGui::End();
+
+        ImGui::SetNextWindowPos(ImVec2(120, 0), ImGuiCond_Appearing);
+        ImGui::Begin("Details");
+        if (ImGui::CollapsingHeader("Screen")) {
             const auto& scr = *screens[screen_id].get();
-            s.AppendFormat(L"Screen: %d, Rows: %d, Cols: %d, View: %d, Line: %d, Scroll: %02x\n", screen_id, scr.rows, scr.cols, scr.view, scr.line, scr.scroll_fade);
-            s.AppendFormat(L"Ptr: (%d, %d), Left: (%d, %d), Right: (%d, %d)\n", scr.ptr_y, scr.ptr_x, scr.ptr_my, scr.ptr_mx, scr.ptr_ry, scr.ptr_rx);
-            for (auto i = max(scr.ptr_y - 2, 0); i <= min(scr.ptr_y + 2, scr.line); i++) {
-                s.AppendFormat(L"LINE #%d | V= %2d, ", i, scr.valid[i]);
-                for (auto j = 0; j < scr.cols; j++) {
-                    if (scr.buffer[i * scr.cols + j])
-                        s.AppendFormat(L"%02X", (BYTE)scr.buffer[i * scr.cols + j]);
-                    else
-                        s.Append(L"  ");
-                }
-                s.Append(L"\n");
-            }
-            s.Append(L"UI:\n");
-            std::vector<int> cached(global_state.render_queue.size());
-            for (const auto& s : global_state.cached_index) {
-                for (auto i = s.start; i < s.end; i++)
-                    cached[i] = s.to;
-            }
-            for (size_t i = 1; i < global_state.render_queue.size(); i++) {
-                s.AppendFormat(L"%2d | (%2d) ", i, cached[i]);
-                const auto k = global_state.render_queue[i].lock();
-                auto _e = k->get_element();
-                for (auto j = 1; j < global_state.render_queue_level[i]; j++) {
-                    s.Append(L"  ");
-                }
-                if (_e.lock()) {
-                    auto e = _e.lock();
-                    s.AppendFormat(L" %S (%d,%d,%dx%d)", e->get_type_str(), e->left, e->top, e->width, e->height);
-                    auto flag = 0;
-                    if (global_state.ui_focus.lock() == k) s.Append(L" focus");
-                    if (global_state.ui_hover.lock() == k) s.Append(L" hover");
-                }
-                s.Append(L"\n");
-            }
-            return s;
+            ImGui::Text("Screen: %d\nRows: %d\nCols: %d\nView: %d\nLine: %d\nScroll: %02x", screen_id, scr.rows, scr.cols, scr.view, scr.line, scr.scroll_fade);
         }
-                     break;
-        case D_WINDOW:
-            break;
-        case D_MEM:
-            break;
-        case D_STAT:
-            break;
-        default:
-            break;
+        if (ImGui::CollapsingHeader("UI Tree")) {
+            if (!global_state.render_queue.empty()) {
+                ImGui::Text("Render Queue: %d\nRender Queue Level: %d", global_state.render_queue.size(), global_state.render_queue_level.size());
+                ImGui::Separator();
+                std::vector<int> cached(global_state.render_queue.size());
+                for (const auto& s : global_state.cached_index) {
+                    for (auto i = s.start; i < s.end; i++)
+                        cached[i] = s.to;
+                }
+                std::vector<int> child(global_state.render_queue_level.size());
+                std::vector<int> next(global_state.render_queue_level.size());
+                std::vector<int> parent(global_state.render_queue_level.size());
+                std::fill(child.begin(), child.end(), -1);
+                std::fill(next.begin(), next.end(), -1);
+                std::fill(parent.begin(), parent.end(), -1);
+                auto cur = global_state.render_queue_level[0];
+                std::vector<int> stacks;
+                for (size_t i = 0; i + 1 < global_state.render_queue_level.size(); i++) {
+                    auto n = global_state.render_queue_level[i + 1];
+                    if (cur < n) {
+                        child[i] = i + 1;
+                        parent[i + 1] = i;
+                        stacks.push_back(i);
+                    }
+                    else if (cur == n) {
+                        next[i] = i + 1;
+                        parent[i + 1] = parent[i];
+                    }
+                    else {
+                        next[stacks[n]] = i + 1;
+                        parent[i + 1] = parent[stacks[n]];
+                        stacks.resize(n);
+                    }
+                    cur = n;
+                }
+                CStringA s;
+                auto end = (int)global_state.render_queue.size() - 1;
+                for (auto i = 0; i <= end;) {
+                    s.Format("%d: Cache=%d", i, cached[i]);
+                    const auto k = global_state.render_queue[i].lock();
+                    auto _e = k->get_element();
+                    if (_e.lock()) {
+                        auto e = _e.lock();
+                        s.AppendFormat(" Type=%s Rect=(%d,%d,%dx%d)", e->get_type_str(), e->left, e->top, e->width, e->height);
+                        auto flag = 0;
+                        if (global_state.ui_focus.lock() == k) s.Append(" *FOCUS*");
+                        if (global_state.ui_hover.lock() == k) s.Append(" *HOVER*");
+                    }
+                    if (child[i] == -1) {
+                        ImGui::TreeNodeEx(s.GetString(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen);
+                        if (ImGui::IsItemHovered()) {
+                            global_state.imgui_hover = i;
+                        }
+                        if (next[i] == -1) { // goto high level
+                            if (i + 1 <= end) {
+                                for (auto j = global_state.render_queue_level[i + 1]; j < global_state.render_queue_level[i]; j++) {
+                                    ImGui::TreePop();
+                                }
+                            }
+                            else { // visit to end
+                                for (auto j = 0; j < global_state.render_queue_level[i]; j++) {
+                                    ImGui::TreePop();
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        auto k = ImGui::TreeNode(s.GetString());
+                        if (ImGui::IsItemHovered()) {
+                            global_state.imgui_hover = i;
+                        }
+                        if (!k) {
+                            auto j = i;
+                            auto trys = false;
+                            while (j != -1) { // goto high level
+                                if (next[j] != -1) {
+                                    i = next[j];
+                                    trys = true;
+                                    break;
+                                }
+                                j = parent[j];
+                            }
+                            if (!trys) { // visit to end
+                                for (auto j = 0; j < global_state.render_queue_level[i]; j++) {
+                                    ImGui::TreePop();
+                                }
+                                break;
+                            }
+                            else {
+                                continue;
+                            }
+                        }
+                    }
+                    i++;
+                }
+            }
+            else {
+                ImGui::Text("Empty");
+            }
         }
-        return CString(ss.str().c_str());
+        if (!ImGui::IsAnyItemHovered()) {
+            global_state.imgui_hover = -1;
+        }
+        ImGui::End();
     }
 
     void cjsgui::add_stat(const CString& s, bool show)

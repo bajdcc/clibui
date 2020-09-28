@@ -54,6 +54,7 @@ void JS2DEngine::Initialize(std::shared_ptr<Direct2DRenderTarget> rt)
     logoBrush = rt->CreateDirect2DBrush(logoColor);
     brushes.cmdTF = rt->CreateDirect2DTextFormat(brushes.cmdFont);
     brushes.gbkTF = rt->CreateDirect2DTextFormat(brushes.gbkFont);
+    brushes.brush = logoBrush;
     font_format = rt->CreateDirect2DTextFormat(font);
     d2drt = rt;
     clib::cjsgui::singleton().change_target(rt);
@@ -68,6 +69,7 @@ void JS2DEngine::Finalize()
     logoBrush = nullptr;
     brushes.cmdTF = nullptr;
     brushes.gbkTF = nullptr;
+    brushes.brush = nullptr;
     font_format = nullptr;
 }
 
@@ -171,89 +173,6 @@ void JS2DEngine::Render(CComPtr<ID2D1RenderTarget> rt, CRect bounds)
     else if (bitmap) {
         reset();
     }
-
-    /*
-    CString logo(_T("clibui @bajdcc"));
-
-    rt->DrawText(logo.GetBuffer(0), logo.GetLength(), logoTF->textFormat,
-        D2D1::RectF((float)bounds.left + 10, (float)bounds.top + 5, (float)bounds.left + 200, (float)bounds.top + 50), logoBrush);
-
-    logo.Format(_T("屏幕（%d）"), clib::cjsgui::singleton().current_screen());
-    rt->DrawText(logo.GetBuffer(0), logo.GetLength(), logoTF->textFormat,
-        D2D1::RectF((float)bounds.left + 10, (float)bounds.top + 35, (float)bounds.left + 200, (float)bounds.top + 60), logoBrush);
-
-    logo.Format(_T("R: %d, FPS: %2.1f IPS: %S"), frame, inv, ipsf(ips));
-    rt->DrawText(logo.GetBuffer(0), logo.GetLength(), logoTF->textFormat,
-        D2D1::RectF((float)bounds.right - 290, (float)bounds.top + 5, (float)bounds.right, (float)bounds.top + 25), logoBrush);
-
-    const auto global = clib::cjsgui::singleton().get_global();
-    logo.Format(_T("[GC] Alive: %d, Cached: %d"), global.total_obj, global.cache_obj);
-    rt->DrawText(logo.GetBuffer(0), logo.GetLength(), logoTF->textFormat,
-        D2D1::RectF((float)bounds.right - 320, (float)bounds.top + 25, (float)bounds.right, (float)bounds.top + 50), logoBrush);
-
-    if (GLOBAL_STATE.is_logging) {
-        const int span = loggingFont.size;
-        const int wspan = brushes.gbkFont.size;
-        auto R = D2D1::RectF((float)bounds.left + 10, (float)bounds.top + 10, (float)bounds.right - 10, (float)bounds.top + 60);
-        rt->FillRectangle(
-            D2D1::RectF((float)bounds.left, (float)bounds.top, (float)bounds.right, (float)bounds.bottom),
-            bg_log
-        );
-        logo = clib::cjsgui::singleton().get_disp(clib::types::D_STAT);
-        if (!logo.IsEmpty()) {
-            auto line = int(logo[0] - L'0');
-            rt->DrawText(logo.GetBuffer(0) + 1, logo.GetLength() - 1, loggingTF->textFormat,
-                D2D1::RectF((float)bounds.left + 10, (float)bounds.bottom - (line)*brushes.gbkFont.size, (float)bounds.left + 200, (float)bounds.bottom), logoBrush);
-        }
-        R.top += span;
-        R.bottom = (float)bounds.bottom;
-        auto disp = clib::cjsgui::singleton().get_disp(clib::types::D_HANDLE);
-        rt->DrawText(disp, disp.GetLength(), loggingTF->textFormat, R, logoBrush);
-        R.top += span;
-        auto lines = 3;
-        {
-            for (auto i = 0; i < disp.GetLength(); i++) {
-                if (disp[i] == L'\n') lines++;
-            }
-        }
-        R.top += lines * span;
-        disp = clib::cjsgui::singleton().get_disp(clib::types::D_WINDOW);
-        rt->DrawText(disp, disp.GetLength(), loggingTF->textFormat, R, logoBrush);
-        R = D2D1::RectF((float)bounds.right - 400, (float)bounds.top + 10, (float)bounds.right - 10, (float)bounds.bottom);
-        disp = clib::cjsgui::singleton().get_disp(clib::types::D_PS);
-        rt->DrawText(disp, disp.GetLength(), loggingTF->textFormat, R, logoBrush);
-        lines = 3;
-        {
-            for (auto i = 0; i < disp.GetLength(); i++) {
-                if (disp[i] == L'\n') lines++;
-            }
-        }
-        auto RM = R;
-        RM.top += lines * span;
-        auto side = lines < 20;
-        if (side)
-            R.top = RM.top;
-        else
-            R.left -= 600;
-        disp = clib::cjsgui::singleton().get_disp(clib::types::D_HTOP);
-        rt->DrawText(disp, disp.GetLength(), loggingTF->textFormat, R, logoBrush);
-        lines = 0;
-        {
-            for (auto i = 0; i < disp.GetLength(); i++) {
-                if (disp[i] == L'\n') lines++;
-            }
-        }
-        if (side) {
-            R.top += lines * wspan + span;
-        }
-        else {
-            R = RM;
-            R.top += 3 * span;
-        }
-        disp = clib::cjsgui::singleton().get_disp(clib::types::D_MEM);
-        rt->DrawText(disp, disp.GetLength(), loggingTF->textFormat, R, logoBrush);
-    }
-    */
 
     if (GLOBAL_STATE.reboot)
         reset();

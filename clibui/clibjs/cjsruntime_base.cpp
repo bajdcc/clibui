@@ -796,7 +796,7 @@ namespace clib {
         permanents.f_ui->add("length", _int_1);
         permanents.f_ui->name = "UI";
         permanents.f_ui->builtin = [](auto& func, auto& _this, auto& args, auto& js, auto attr) {
-return js.call_api(API_UI_new, _this, args, 0);
+            return js.call_api(API_UI_new, _this, args, 0);
         };
         permanents._proto_ui_render_internal = _new_function(nullptr, js_value::at_const | js_value::at_readonly);
         permanents._proto_ui_render_internal->add("length", _int_2);
@@ -1291,7 +1291,7 @@ return js.call_api(API_UI_new, _this, args, 0);
             buf->set_buffer(*this, data);
             push(buf);
         }
-                      break;
+                            break;
         case API_buffer_toString: {
             auto r = 0;
             auto th = _this.lock();
@@ -1321,7 +1321,7 @@ return js.call_api(API_UI_new, _this, args, 0);
             push(new_string(_this.lock()->to_string(this, 2, &r)));
             return r;
         }
-                            break;
+                                break;
         case API_config: {
             if (args.empty()) {
                 push(new_undefined());
@@ -1388,7 +1388,7 @@ return js.call_api(API_UI_new, _this, args, 0);
             }
             push(new_string("invalid config"));
         }
-                                break;
+                       break;
         case API_get_config: {
             if (args.empty()) {
                 push(new_undefined());
@@ -1445,7 +1445,7 @@ return js.call_api(API_UI_new, _this, args, 0);
             }
             push(new_undefined());
         }
-                       break;
+                           break;
         case API_math: {
             if (args.size() < 2) {
                 push(new_number(JS_NAN));
@@ -1490,7 +1490,7 @@ return js.call_api(API_UI_new, _this, args, 0);
             }
             push(new_number(JS_NAN));
         }
-                           break;
+                     break;
         case API_UI_new: {
             if (args.empty()) {
                 push(new_undefined());
@@ -1529,30 +1529,31 @@ return js.call_api(API_UI_new, _this, args, 0);
                 auto l = args[1].lock()->to_number(this, &r);
                 if (r != 0)
                     return r;
-                GLOBAL_STATE.render_queue_level.push_back((int)l);
                 auto ui = JS_UI(obj);
-                if (n == 1.0f)
+                if (n == 1.0f) {
                     GLOBAL_STATE.render_queue_auto.push_back(ui);
+                    GLOBAL_STATE.render_queue_level.push_back((int)l);
+                }
                 else if (n == 2.0f)
                     GLOBAL_STATE.render_queue_auto_bk.push_back(ui);
             } while (0);
             push(new_undefined());
         }
-                       break;
+                          break;
         case API_helper: {
             js_value::ref ret = new_undefined();
             auto r = call_helper(args, ret);
             push(ret);
             return r;
         }
-                          break;
+                       break;
         case API_parseInt: {
             if (args.empty()) {
                 push(new_number(JS_NAN));
                 break;
             }
             auto a = args.front().lock();
-            if (a->get_type() == r_number) { 
+            if (a->get_type() == r_number) {
                 push(a);
                 break;
             }
@@ -1562,7 +1563,7 @@ return js.call_api(API_UI_new, _this, args, 0);
                 return r;
             push(new_number(n));
         }
-                       break;
+                         break;
         case API_fs: {
             if (args.empty()) {
                 push(new_undefined());
@@ -1612,7 +1613,7 @@ return js.call_api(API_UI_new, _this, args, 0);
             }
             push(new_string("invalid fs call"));
         }
-                     break;
+                   break;
         default:
             break;
         }

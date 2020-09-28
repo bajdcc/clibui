@@ -19,7 +19,7 @@ Direct2D::Direct2D()
     HRESULT hr = S_OK;
 
     IDWriteFactory* dwrite;
-    hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_ISOLATED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown * *>(&dwrite));
+    hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_ISOLATED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(&dwrite));
     if (SUCCEEDED(hr))
         DWriteFactory.Attach(dwrite);
     else
@@ -45,7 +45,7 @@ void Direct2D::Init()
 #else
         options.debugLevel = D2D1_DEBUG_LEVEL_NONE;
 #endif
-        auto hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory1), &options, (void**)& d2d1);
+        auto hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory1), &options, (void**)&d2d1);
         if (SUCCEEDED(hr))
             D2D1Factory.Attach(d2d1);
         else
@@ -253,15 +253,7 @@ HRESULT Direct2D::Present()
     ImGui::End();
 
     if (GLOBAL_STATE.is_logging) {
-        auto logo = clib::cjsgui::singleton().get_disp(clib::types::D_STAT);
-
-        ImGui::SetNextWindowPos(ImVec2(0, h * 0.5f), ImGuiCond_Appearing);
-        ImGui::Begin("Log");
-        for (const auto k : GLOBAL_STATE.stat_s) {
-            ImGui::Text(k.GetString());
-        }
-        ImGui::SetScrollHereY(1.0f);
-        ImGui::End();
+        clib::cjsgui::singleton().render_log();
     }
 
     ImGui::Render();
@@ -287,7 +279,7 @@ void Direct2D::ReportLiveObjects()
     HRESULT hr;
     HMODULE hDxgiDebug = GetModuleHandle(_T("Dxgidebug.dll"));
     if (!hDxgiDebug) return;
-    typedef HRESULT(WINAPI *pfnDXGIGetDebugInterface)(REFIID riid, void **ppDebug);
+    typedef HRESULT(WINAPI* pfnDXGIGetDebugInterface)(REFIID riid, void** ppDebug);
     pfnDXGIGetDebugInterface _DXGIGetDebugInterface = (pfnDXGIGetDebugInterface)GetProcAddress(hDxgiDebug, "DXGIGetDebugInterface");
     if (!_DXGIGetDebugInterface) return;
     CComPtr<IDXGIDebug1> dxgiDebug;

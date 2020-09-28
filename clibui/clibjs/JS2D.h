@@ -15,6 +15,7 @@ public:
     struct BrushBag {
         Font cmdFont; std::shared_ptr<D2DTextFormatPackage> cmdTF;
         Font gbkFont; std::shared_ptr<D2DTextFormatPackage> gbkTF;
+        CComPtr<ID2D1SolidColorBrush> brush;
     } brushes;
 
 private:

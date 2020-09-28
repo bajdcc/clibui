@@ -74,7 +74,7 @@ namespace clib {
         void hit(int n);
         void output() const;
 
-        CString get_disp(types::disp_t) const;
+        void render_log();
         void add_stat(const CString& s, bool show = true);
 
         int new_screen(int n);
@@ -189,6 +189,7 @@ namespace clib {
             std::vector<int> render_queue_level;
             std::vector<jsv_ui::weak_ref> render_queue_bk;
             std::vector<jsv_ui::weak_ref> render_queue_auto_bk;
+            int imgui_hover{ -1 };
             jsv_ui::weak_ref ui_focus;
             jsv_ui::weak_ref ui_hover;
             int cursor{ 0 };
