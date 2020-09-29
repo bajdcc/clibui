@@ -15,11 +15,14 @@ namespace clib {
         auto D3D11Device = Direct2D::Singleton().GetDirect3DDevice();
         auto D3D11DeviceContext = Direct2D::Singleton().GetDirect3DDeviceContext();
 
-        struct Vertex { float x, y; }; // 点
+        struct Vertex {
+            float x, y;
+            CColor color;
+        }; // 点
         const Vertex vertices[] = { // 三个点
-            {0.0f, 0.5f},
-            {0.5f, -0.5f},
-            {-0.5f, -0.5f}
+            {0.0f, 0.5f,{D2D1::ColorF::Red}},
+            {0.5f, -0.5f,{D2D1::ColorF::Green}},
+            {-0.5f, -0.5f,{D2D1::ColorF::Blue}}
         };
         CComPtr<ID3D11Buffer> buffer;
         D3D11_BUFFER_DESC bd{};
@@ -55,7 +58,8 @@ namespace clib {
 
         CComPtr<ID3D11InputLayout> layout; // 给顶点着色器设置入口参数
         const D3D11_INPUT_ELEMENT_DESC ied[] = {
-            {"Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
+            {"Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+            {"Color", 0, DXGI_FORMAT_B8G8R8A8_UNORM, 0, 8u, D3D11_INPUT_PER_VERTEX_DATA, 0}
         };
         hr = D3D11Device->CreateInputLayout(ied, (UINT)std::size(ied), blob->GetBufferPointer(), blob->GetBufferSize(), &layout); // 创建入口参数
         if (hr != S_OK) return hr;
